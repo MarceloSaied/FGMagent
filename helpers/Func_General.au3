@@ -19,7 +19,9 @@
 		EndIf
 	EndFunc
 	Func _Exit()
-		TCPSend($f_Socket, 'CANCEL')
+;~ 		TCPSend($f_Socket, 'CANCEL')
+		_EndLog()
+		FileClose($hLogFile)
 	EndFunc   ;==>_Exit( )
 #endregion
 #region Firewall
@@ -42,31 +44,39 @@
 	EndFunc
 #endregion
 #region log
+	Func _initLog()
+		ConsoleWrite('++_initLog() = '& @crlf)
+		$hLogFile = FileOpen($LogFile, 1+8)
+		If $hLogFile = -1 Then
+			ConsoleWrite("Error Unable to open file.")
+			Exit
+		EndIf
+		FileWriteLine($hLogFile,"===============================================================================")
+		FileWriteLine($hLogFile,"===============================================================================")
+		FileWriteLine($hLogFile,_NowCalcDate()  & @TAB& "Version: "& $version)
+		FileWriteLine($hLogFile,"===============================================================================")
+	EndFunc
 	Func _ConsoleWrite($s_text)
-		_GUICtrlEdit_AppendText($e_csle, $s_text & @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile, _LogDate()&" "&$s_text & @CRLF)
 		ConsoleWrite($s_text & @CRLF)
 	EndFunc   ;==>_ConsoleWrite
-	Func  StartLog()  ; init log file
-		$logFile=FileOpen($logFileName,2)
-		FileWriteLine($logFile,'Start of activities' & @TAB & @TAB  & _NowCalc() & @crlf)
-	EndFunc
 	Func _LogDate()
 		$tCur = _Date_Time_GetLocalTime()
 		$tCur = _Date_Time_SystemTimeToDateTimeStr($tCur)
 		$date = "[" & stringreplace($tCur,"/","-") & "] "
 		return $date
 	EndFunc
-	Func _initLog()
-		ConsoleWrite('++_initLog() = '& @crlf)
-		$hLogFile = FileOpen($LogFile, 1+8)
+	Func _EndLog()
+		ConsoleWrite('++_EndLog() = '& @crlf)
 		FileWriteLine($hLogFile,"===============================================================================")
 		FileWriteLine($hLogFile,"===============================================================================")
-		FileWriteLine($hLogFile,_NowCalcDate()  & @TAB& "Version: "& $version)
+		FileWriteLine($hLogFile,_NowCalcDate()  & @TAB& "End of activities"
 		FileWriteLine($hLogFile,"===============================================================================")
+		FileClose($hLogFile)
 	EndFunc
 #endregion
 #region file check
-	Func _IsFolder($sFolder)
+	Func _IsFolder($sFolder,$SkipobtainAtributesFlag=0 )
 		Local $sAttribute = FileGetAttrib($sFolder)
 		If @error Then
 			If $SkipobtainAtributesFlag=0 Then

@@ -5,7 +5,9 @@
 	$ProgramdataDir="c:\ProgramData"
 #endregion
 #region log
-	$logFileName=$ProgramdataDir&"\FGM"
+	$logFileDir=$ProgramdataDir&"\FGM"
+	$LogFile=$logFileDir&"\FGMagent.log"
+	$hLogFile=""
 #endregion
 #region encryption
 	$Password="apt"

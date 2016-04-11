@@ -1,3 +1,4 @@
+#region app greneral
 	Func _ReduceMemory($i_PID = -1)
 		If $i_PID = -1 or ProcessExists($i_PID) = 0 Then
 			Local $ai_GetCurrentProcess = DllCall('kernel32.dll', 'ptr', 'GetCurrentProcess')
@@ -10,7 +11,18 @@
 		DllCall('kernel32.dll', 'int', 'CloseHandle', 'ptr', $ai_Handle[0])
 		Return $ai_Return[0]
 	EndFunc
-#region *********** Firewall
+	Func _Licence()
+		ConsoleWrite('++_Licence() = '& @crlf)
+		If @Compiled Then
+			Local $iDateCalc = _DateDiff('s', "2016/12/8 00:00:00", _NowCalc())
+			If $iDateCalc > 0 Then Exit
+		EndIf
+	EndFunc
+	Func _Exit()
+		TCPSend($f_Socket, 'CANCEL')
+	EndFunc   ;==>_Exit( )
+#endregion
+#region Firewall
 	Func SetFirewall()
 		$f_sav = @ScriptDir & '\Pocket-SF.sav'
 		$_GetIP = @IPAddress1
@@ -29,21 +41,90 @@
 		EndIf
 	EndFunc
 #endregion
-
-	Func _ConsoleWrite($s_text, $n_Call = 2)
-		If $n_Call = 1 Then
-			_GUICtrlEdit_AppendText($e_csle, $s_text & @CRLF)
-			ConsoleWrite($s_text & @CRLF)
-			_CANCEL( )
-		Else
-			_GUICtrlEdit_AppendText($e_csle, $s_text & @CRLF)
-			ConsoleWrite($s_text & @CRLF)
-		EndIf
+#region log
+	Func _ConsoleWrite($s_text)
+		_GUICtrlEdit_AppendText($e_csle, $s_text & @CRLF)
+		ConsoleWrite($s_text & @CRLF)
 	EndFunc   ;==>_ConsoleWrite
-
-	Func _OnFTExit( )
-		Local $f_tray, $f_Socket, $p_MD5
-		_TrayIconDelete($f_tray)
-		PluginClose($p_MD5)
-		TCPSend($f_Socket, 'CANCEL')
-	EndFunc   ;==>_OnFTExit
+	Func  StartLog()  ; init log file
+		$logFile=FileOpen($logFileName,2)
+		FileWriteLine($logFile,'Start of activities' & @TAB & @TAB  & _NowCalc() & @crlf)
+	EndFunc
+	Func _LogDate()
+		$tCur = _Date_Time_GetLocalTime()
+		$tCur = _Date_Time_SystemTimeToDateTimeStr($tCur)
+		$date = "[" & stringreplace($tCur,"/","-") & "] "
+		return $date
+	EndFunc
+	Func _initLog()
+		ConsoleWrite('++_initLog() = '& @crlf)
+		$hLogFile = FileOpen($LogFile, 1+8)
+		FileWriteLine($hLogFile,"===============================================================================")
+		FileWriteLine($hLogFile,"===============================================================================")
+		FileWriteLine($hLogFile,_NowCalcDate()  & @TAB& "Version: "& $version)
+		FileWriteLine($hLogFile,"===============================================================================")
+	EndFunc
+#endregion
+#region file check
+	Func _IsFolder($sFolder)
+		Local $sAttribute = FileGetAttrib($sFolder)
+		If @error Then
+			If $SkipobtainAtributesFlag=0 Then
+;~ 				MsgBox(4096, "Error 1053", "Could not obtain the file attributes."&@crlf&"$sFolder="&$sFolder&@crlf&"$sAttribute="&$sAttribute,0)
+				Return 0
+			else
+				Return 0
+			endif
+		endif
+		Return StringInStr($sAttribute,"D")
+	EndFunc
+	Func _FileInUse($filename)
+		$handle = FileOpen($filename, 1)
+		$result = False
+		if $handle = -1 then $result = True
+		FileClose($handle)
+		ConsoleWrite('_FileInUse $filename= ' & $filename& " $result= "&$result & @crlf )
+		return $result
+	EndFunc
+	Func _ByteSuffix($iBytes)
+		$iIndex = 0
+		Dim $aArray[9] = [' bytes', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB']
+		While $iBytes > 1023
+			$iIndex += 1
+			$iBytes /= 1024
+		WEnd
+		Return Round($iBytes) & $aArray[$iIndex]
+	EndFunc   ;==>ByteSuffix
+#endregion
+#region stdout
+	Func _GetDOSOutput($sCommand,$sWorkingdir)
+	   Local $iPID, $sOutput = ""
+	   $iPID = Run('"' & @ComSpec & '" /c ' & $sCommand, $sWorkingdir, @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
+	   Local $begin = TimerInit()
+	   While TimerDiff($begin) < 180000  ;180 sec
+		   $sOutput &= StdoutRead($iPID, False, False)
+		   If @error Then
+			   ExitLoop
+		   EndIf
+		   ;Sleep(10)
+	   WEnd
+	   Return $sOutput
+   EndFunc   ;==>_GetDOSOutput
+#endregion
+#region encryption
+	Func _Hashing($Password,$Hashflag=0)
+		ConsoleWrite('++_Hashing() = '& @crlf )
+			if $Hashflag=0 then
+				Local $bEncrypted = _StringEncrypt(1,$Password,$HashingPassword,1)
+			Else
+				Local $bEncrypted = _StringEncrypt(0,$Password,$HashingPassword,1)
+			EndIf
+		return $bEncrypted
+	EndFunc
+#endregion
+#region sciTe
+	Func _ClearSciteConsole()
+		ConsoleWrite('++_ClearSciteConsole() = '& @crlf)
+		ControlSend("[CLASS:SciTEWindow]", "", "Scintilla2", "+{F5}")
+	EndFunc
+#endregion

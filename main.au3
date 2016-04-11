@@ -21,21 +21,15 @@
 ;~ #Obfuscator_Parameters=/cs=1 /cn=1 /cf=1 /cv=1 /sf=1 /sv=1
 ;~ #Obfuscator_Parameters=/cs=1 /cn=1 /cf=1 /cv=1 /sf=1
 ;~ #AutoIt3Wrapper_Run_After=start c:\dropbox\Sharedqed\RobertoI@MarceloSaied\FGM_Agent\Release\updaterCompilerDEV.cmd
-#include <Misc.au3>
-
-If _Singleton(@ScriptName, 1) = 0 Then ; allow only one instance
-	_ConsoleWrite(0, "Warning", "An occurence of " & @ScriptName & " is already running")
-	Exit
-EndIf
-
 #region LoadInit
-		_ConsoleWrite('++_LoadInit()'& @crlf)
-
-		Sleep(1000)
 		#include <Includes\includes.au3>
+		#include <Misc.au3>
+		If _Singleton(@ScriptName, 1) = 0 Then ; allow only one instance
+			_ConsoleWrite("Warning - An occurence of " & @ScriptName & " is already running")
+			Exit
+		EndIf
 		_Licence()
-		_ConsoleWrite('Version = '&FileGetVersion(@ScriptName),0,16,"","","","0x2C3539","0x0FFFC19")& @crlf)
-		FileWriteLine($logFile,'Get_SAPSYSTEM' & "()"& @crlf)
+		_initLog()
 ;~ 		Opt("GUIOnEventMode", 1)
 ;~ 		AutoItSetOption("WinTitleMatchMode", 4)
 ;~ 		GUIRegisterMsg($WM_COMMAND, "WM_COMMAND")

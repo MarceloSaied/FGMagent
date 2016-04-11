@@ -10,12 +10,14 @@
 	#include <Date.au3>
 
 	#include <GuiEdit.au3>
+	#include <String.au3>
 	Global Const $SC_CLOSE = 0xF060;
 
 #endregion
 
 #region application
-	#include <variables.au3>
-	#include <functions.au3>
-	#include <controls.au3>
+	#include <../variables.au3>
+	#include <../controls/functions.au3>
+	#include <../helpers/func_General.au3>
+	#include <../controls/controls.au3>
 #endregion

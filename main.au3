@@ -30,6 +30,7 @@
 		EndIf
 		_Licence()
 		_initLog()
+		_ReduceMemory()
 ;~ 		Opt("GUIOnEventMode", 1)
 ;~ 		AutoItSetOption("WinTitleMatchMode", 4)
 ;~ 		GUIRegisterMsg($WM_COMMAND, "WM_COMMAND")
@@ -37,10 +38,13 @@
 ;~ 		GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
 ;~ 		_ConfigDBInitial()
-		_ReduceMemory()
+
 #endregion
 While 1
-	Sleep(100)
+
+
+
+	Sleep(10)
 WEnd
 _Exit()
 

@@ -138,3 +138,13 @@
 		ControlSend("[CLASS:SciTEWindow]", "", "Scintilla2", "+{F5}")
 	EndFunc
 #endregion
+
+
+Func _ServerIP()
+	ConsoleWrite('++_ServerIP() = '& @crlf)
+	TCPStartup()
+	$serverip= TCPNameToIP(@ComputerName)
+	_ConsoleWrite("Server name ="&@ComputerName & @TAB & "server ip="&$serverip)
+	TCPShutdown()
+	Return $serverip
+EndFunc

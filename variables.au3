@@ -13,3 +13,10 @@
 	$Password="apt"
 	$HashingPassword="apt"
 #endregion
+#region TCP Variables
+Dim $sMaxConnections = 10
+Dim $sSocket[$sMaxConnections], $sBuffer[$sMaxConnections], $iAuth[$sMaxConnections]
+
+;; TCP Options
+Dim $sIPAddress = @IPAddress1, $nPort = 23
+#endregion

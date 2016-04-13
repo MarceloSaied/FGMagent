@@ -12,6 +12,7 @@
 #region encryption
 	$Password="apt"
 	$HashingPassword="apt"
+	$passcode="testeo"
 #endregion
 #region TCP Variables
 Dim $sMaxConnections = 10

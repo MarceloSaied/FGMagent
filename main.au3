@@ -38,13 +38,13 @@
 ;~ 		GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
 
 ;~ 		_ConfigDBInitial()
-
+		$var=_getToken()
 #endregion
 While 1
+		ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : _IsValidToken($var) = ' & _IsValidToken($var) & @crlf )
+		ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $var = ' & $var & @crlf )
 
-
-
-	Sleep(10)
+	Sleep(1000)
 WEnd
 _Exit()
 

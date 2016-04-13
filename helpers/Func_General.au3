@@ -122,12 +122,12 @@
    EndFunc   ;==>_GetDOSOutput
 #endregion
 #region encryption
-	Func _Hashing($Password,$Hashflag=0)
-		ConsoleWrite('++_Hashing() = '& @crlf )
+	Func _Hashing($Password,$Hashflag=0)  ;1 to encrypt, 0 to decrypt.
+		ConsoleWrite('++_Hashing() = '&$Hashflag& @crlf )
 			if $Hashflag=0 then
-				Local $bEncrypted = _StringEncrypt(1,$Password,$HashingPassword,1)
+				Local $bEncrypted = _StringEncrypt(0,$Password,$HashingPassword,1) ;0 to decrypt
 			Else
-				Local $bEncrypted = _StringEncrypt(0,$Password,$HashingPassword,1)
+				Local $bEncrypted = _StringEncrypt(1,$Password,$HashingPassword,1)  ;1 to encrypt
 			EndIf
 		return $bEncrypted
 	EndFunc
@@ -148,3 +148,21 @@ Func _ServerIP()
 	TCPShutdown()
 	Return $serverip
 EndFunc
+
+Func _GetUnixTime($sDate = 0);Date Format: 2013/01/01 00:00:00 ~ Year/Mo/Da Hr:Mi:Se
+
+    Local $aSysTimeInfo = _Date_Time_GetTimeZoneInformation()
+    Local $utcTime = ""
+
+    If Not $sDate Then $sDate = _NowCalc()
+
+    If Int(StringLeft($sDate, 4)) < 1970 Then Return ""
+
+    If $aSysTimeInfo[0] = 2 Then
+        $utcTime = _DateAdd('n', $aSysTimeInfo[1] + $aSysTimeInfo[7], $sDate)
+    Else
+        $utcTime = _DateAdd('n', $aSysTimeInfo[1], $sDate)
+    EndIf
+
+    Return _DateDiff('s', "1970/01/01 00:00:00", $utcTime)
+EndFunc   ;==>_GetUnixTime

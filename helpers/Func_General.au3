@@ -25,7 +25,7 @@
 	EndFunc   ;==>_Exit( )
 #endregion
 #region Firewall
-	Func SetFirewall()
+	Func ___SetFirewall()
 		$f_sav = @ScriptDir & '\Pocket-SF.sav'
 		$_GetIP = @IPAddress1
 		Local $s_reg = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run', $f_fopen, $f_Socket, $f_tray
@@ -51,10 +51,10 @@
 			ConsoleWrite("Error Unable to open file.")
 			Exit
 		EndIf
-		FileWriteLine($hLogFile,"===============================================================================")
-		FileWriteLine($hLogFile,"===============================================================================")
-		FileWriteLine($hLogFile,_NowCalcDate()  & @TAB& "Version: "& $version)
-		FileWriteLine($hLogFile,"===============================================================================")
+		_GUICtrlEdit_AppendText($hLogFile,"===============================================================================" & @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile,"==============================================================================="& @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile,_NowCalcDate()  & @TAB& "Version: "& $version& @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile,"==============================================================================="& @CRLF)
 	EndFunc
 	Func _ConsoleWrite($s_text)
 		_GUICtrlEdit_AppendText($hLogFile, _LogDate()&" "&$s_text & @CRLF)
@@ -68,15 +68,15 @@
 	EndFunc
 	Func _EndLog()
 		ConsoleWrite('++_EndLog() = '& @crlf)
-		FileWriteLine($hLogFile,"===============================================================================")
-		FileWriteLine($hLogFile,"===============================================================================")
-		FileWriteLine($hLogFile,_NowCalcDate()  & @TAB& "End of activities"
-		FileWriteLine($hLogFile,"===============================================================================")
+		_GUICtrlEdit_AppendText($hLogFile,"===============================================================================" & @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile,"===============================================================================" & @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile,_NowCalcDate()   & @TAB& "End of activities")
+		_GUICtrlEdit_AppendText($hLogFile,"===============================================================================" & @CRLF)
 		FileClose($hLogFile)
 	EndFunc
 #endregion
 #region file check
-	Func _IsFolder($sFolder,$SkipobtainAtributesFlag=0 )
+	Func ___IsFolder($sFolder,$SkipobtainAtributesFlag=0 )
 		Local $sAttribute = FileGetAttrib($sFolder)
 		If @error Then
 			If $SkipobtainAtributesFlag=0 Then
@@ -88,7 +88,7 @@
 		endif
 		Return StringInStr($sAttribute,"D")
 	EndFunc
-	Func _FileInUse($filename)
+	Func ___FileInUse($filename)
 		$handle = FileOpen($filename, 1)
 		$result = False
 		if $handle = -1 then $result = True
@@ -96,7 +96,7 @@
 		ConsoleWrite('_FileInUse $filename= ' & $filename& " $result= "&$result & @crlf )
 		return $result
 	EndFunc
-	Func _ByteSuffix($iBytes)
+	Func ___ByteSuffix($iBytes)
 		$iIndex = 0
 		Dim $aArray[9] = [' bytes', ' KB', ' MB', ' GB', ' TB', ' PB', ' EB', ' ZB', ' YB']
 		While $iBytes > 1023

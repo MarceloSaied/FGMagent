@@ -14,7 +14,9 @@
 	Global Const $SC_CLOSE = 0xF060;
 
 #endregion
-
+#region UDFs
+	#include <..\udf\_ValidIP.au3>
+#endregion
 #region application
 	#include <../variables.au3>
 	#include <../helpers/func_General.au3>

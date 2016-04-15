@@ -95,7 +95,7 @@
 		ConsoleWrite('++_EndLog() = '& @crlf)
 		_GUICtrlEdit_AppendText($hLogFile,"..............................................................................." & @CRLF)
 		_GUICtrlEdit_AppendText($hLogFile,_NowCalcDate()   & @TAB& "End of activities")
-		_GUICtrlEdit_AppendText($hLogFile............................................................................... & @CRLF& @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile,"..............................................................................." & @CRLF& @CRLF)
 		FileClose($hLogFile)
 	EndFunc
 #endregion

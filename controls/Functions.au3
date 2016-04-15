@@ -80,14 +80,23 @@
 	EndFunc
 
 
-	func checkerror($err)
+	func _checkerror($err)
 		Switch $err
+			Case 1
+				_ConsoleWrite("The listening address is incorrect (Possibly another server is already running): " & $listenerIP,3)
+			Case 2
+				_ConsoleWrite("The listening port is incorrect (Possibly another server is already running): " & $nPort,3)
 			Case 10048
-				ConsoleWrite("!!  Address already in use. " & @crlf)
+				_ConsoleWrite("Address already in use. " ,3)
 			Case 10050
-				ConsoleWrite("!!  Network is down. " & @crlf)
+				_ConsoleWrite("Network is down. " ,3)
+			Case 10013
+				_ConsoleWrite("Permission denied. An attempt was made to access a socket in a way forbidden by its access permissions. " ,3)
+			Case 10014
+				_ConsoleWrite("Bad address. The system detected an invalid pointer address in attempting to use a pointer argument of a call" ,3)
 			Case Else
-				ConsoleWrite("!!  ERROR  NUMBER = " & $err  &  @crlf)
+				_ConsoleWrite("Unable to set up a listening server on IP " & $listenerIP & " Port " & _
+								$nPort & " ERROR  NUMBER = " & $err,3 )
 		EndSwitch
 	EndFunc
 ;~ 	Func _CloseReceiveTCP( )

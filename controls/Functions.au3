@@ -99,11 +99,11 @@
 								$nPort & " ERROR  NUMBER = " & $err,3 )
 		EndSwitch
 	EndFunc
-;~ 	Func _CloseReceiveTCP( )
-;~ 		ConsoleWrite('_CloseReceiveTCP( ) '& @crlf)
-;~ 		TCPCloseSocket($f_Socket)
-;~ 		FileClose($f_fopen)
-;~ 		TCPShutdown( )
-;~ 	EndFunc   ;==>_CloseReceiveTCP
-
+	Func _stopListener( )
+		ConsoleWrite('_stopListener( ) '& @crlf)
+		TCPCloseSocket($sMainSocket)
+		TCPShutdown( )
+		_ConsoleWrite("Listener TCP Socket closed" ,3)
+		$ListenerActive=0
+	EndFunc   ;==>_CloseReceiveTCP
 #endregion

@@ -41,8 +41,6 @@ $UnitTest=1
 	endif
 #endregion
 #region main
-_PathRequest()
-_BatRequest()
 	_startListener()
 	$ServiceIdleTimerInit=TimerInit()
 	While $ListenerActive

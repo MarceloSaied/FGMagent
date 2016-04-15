@@ -103,24 +103,20 @@
 	EndFunc
 	Func _TCPacceptConnection()
 ;~ 		ConsoleWrite('++_TCPacceptConnection() = '& @crlf)
-		If $UnitTest=0 Then
-			;; Accept new incoming clients, and ask them to authorise.
-			$ConnectedSocket = TCPAccept($sMainSocket)
-			If $ConnectedSocket > -1 Then
-				; Get IP of client connecting
-				$szIP_Accepted = _SocketToIP($ConnectedSocket)
-				If _IsValidIP($szIP_Accepted) then
-					_ConsoleWrite("Client connected IP "& $szIP_Accepted,1)
-				Else
-					_ConsoleWrite("Client connected IP not valid "& $szIP_Accepted,2)
-				endif
-				Return true
+		;; Accept new incoming clients, and ask them to authorise.
+		$ConnectedSocket = TCPAccept($sMainSocket)
+		If $ConnectedSocket > -1 Then
+			; Get IP of client connecting
+			$szIP_Accepted = _SocketToIP($ConnectedSocket)
+			If _IsValidIP($szIP_Accepted) then
+				_ConsoleWrite("Client connected IP "& $szIP_Accepted,1)
 			Else
-				Return false
-			EndIf
-		Else
+				_ConsoleWrite("Client connected IP not valid "& $szIP_Accepted,2)
+			endif
 			Return true
-		endif
+		Else
+			Return false
+		EndIf
 	EndFunc
 	Func _Authentication()
 		ConsoleWrite('++_Authentication() = '& @crlf)
@@ -135,7 +131,7 @@
 				$recv= _WaitResponse("OFR_CRED",100,60000)
 				If $recv Then
 					$TokenRecv=StringReplace($recv,"OFR_CRED","")
-					If $UnitTest=0 Then
+					If $UnitTest=0 Then                 ; ----------------- UnitTest ------------
 						$TokenValid=_IsValidToken($tokenrecv)
 					Else
 						$TokenValid=true
@@ -164,75 +160,67 @@
 	EndFunc
 	Func _PathRequest()
 		ConsoleWrite('++_PathRequest() = '& @crlf)
-		If $UnitTest=0 Then
-			$bitesSent=TCPSend($ConnectedSocket, "REQ_PATH")
-			$err=@error
-			If $err Then
-				If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. PathRequest error '&$err,3)
-				_stopListener()
-				Return false
-			else
-				If $bitesSent>1 Then
-					$recv= _WaitResponse("OFR_PATH",1000,60000)
-					If $recv Then
-						$PathRecv=StringReplace($recv,"OFR_PATH","")
-						$PathValid=_IsFolder($Pathrecv)
-						_ConsoleWrite('Path validation is  '&$PathValid,1)
-						If $PathValid Then
-							TCPSend($ConnectedSocket, "PATH_OK")
-							Return true
-						Else
-							TCPSend($ConnectedSocket, "PATH_DENY")
-							_stopListener( )
-							Return false
-						endif
+		$bitesSent=TCPSend($ConnectedSocket, "REQ_PATH")
+		$err=@error
+		If $err Then
+			If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. PathRequest error '&$err,3)
+			_stopListener()
+			Return false
+		else
+			If $bitesSent>1 Then
+				$recv= _WaitResponse("OFR_PATH",1000,60000)
+				If $recv Then
+					$PathRecv=StringReplace($recv,"OFR_PATH","")
+					$PathValid=_IsFolder($Pathrecv)
+					_ConsoleWrite('Path validation is  '&$PathValid,1)
+					If $PathValid Then
+						TCPSend($ConnectedSocket, "PATH_OK")
+						Return true
 					Else
+						TCPSend($ConnectedSocket, "PATH_DENY")
+						_stopListener( )
 						Return false
 					endif
 				Else
-					_ConsoleWrite('Path canot be requested by REQ_PATH',3)
 					Return false
 				endif
+			Else
+				_ConsoleWrite('Path canot be requested by REQ_PATH',3)
+				Return false
 			endif
-		Else
-			Return true
-		EndIf
+		endif
 	EndFunc
 	Func _BatRequest()
 		ConsoleWrite('++_BatRequest() = '& @crlf)
-		If $UnitTest=0 Then
-			$bitesSent=TCPSend($ConnectedSocket, "REQ_BAT")
-			$err=@error
-			If $err Then
-				If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. BatRequest error '&$err,3)
-				_stopListener()
-				Return false
-			else
-				If $bitesSent>1 Then
-					$recv= _WaitResponse("OFR_BAT",1000,60000)
-					If $recv Then
-						$BatRecv=StringReplace($recv,"OFR_BAT","")
-						$BatValid=FileExists($BatRecv)
-						_ConsoleWrite('Bat validation is  '&$BatValid,1)
-						If $BatValid Then
-							TCPSend($ConnectedSocket, "BAT_OK")
-							Return true
-						Else
-							TCPSend($ConnectedSocket, "BAT_DENY")
-							_stopListener( )
-							Return false
-						endif
+		$bitesSent=TCPSend($ConnectedSocket, "REQ_BAT")
+		$err=@error
+		If $err Then
+			If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. BatRequest error '&$err,3)
+			_stopListener()
+			Return false
+		else
+			If $bitesSent>1 Then
+				$recv= _WaitResponse("OFR_BAT",1000,60000)
+				If $recv Then
+					$BatRecv=StringReplace($recv,"OFR_BAT","")
+					$BatValid=FileExists($BatRecv)
+					_ConsoleWrite('Bat validation is  '&$BatValid,1)
+					If $BatValid Then
+						TCPSend($ConnectedSocket, "BAT_OK")
+						Return true
 					Else
+						TCPSend($ConnectedSocket, "BAT_DENY")
+						_stopListener( )
 						Return false
 					endif
 				Else
-					_ConsoleWrite('Bat canot be requested by REQ_BAT',3)
 					Return false
 				endif
+			Else
+				_ConsoleWrite('Bat canot be requested by REQ_BAT',3)
+				Return false
 			endif
-		Else
-			Return true
-		EndIf
+		endif
 	EndFunc
 #endregion
 #region =================================== TCP connection helpers   ========================================

@@ -66,24 +66,28 @@
 			ConsoleWrite("Error Unable to open file.")
 			Exit
 		EndIf
-		_GUICtrlEdit_AppendText($hLogFile,"===============================================================================" & @CRLF)
-		_GUICtrlEdit_AppendText($hLogFile,"==============================================================================="& @CRLF)
-		_GUICtrlEdit_AppendText($hLogFile,_NowCalcDate()  & @TAB& "Start of activities"& @TAB& "Version: "& $version& @CRLF)
-		_GUICtrlEdit_AppendText($hLogFile,"==============================================================================="& @CRLF)
+		ConsoleWrite('- LogFile = ' & $LogFile & @crlf )
+		FileWriteLine($hLogFile,"===============================================================================" )
+		FileWriteLine($hLogFile,"===============================================================================")
+		FileWriteLine($hLogFile,_NowCalcDate()  & @TAB& "Start of activities"& @TAB& "Version: "& $version)
+		FileWriteLine($hLogFile,"===============================================================================")
 	EndFunc
 	Func _ConsoleWrite($s_text,$logLevel="1")
 		Switch $logLevel
 			Case 1
+				$levelcolor=">"
 				$logLevelmsg="INFO"
 			Case 2
+				$levelcolor="-"
 				$logLevelmsg="WARN"
 			Case 3
+				$levelcolor="!"
 				$logLevelmsg="ERROR"
 			Case Else
 				$logLevelmsg="NA"
 		EndSwitch
-		_GUICtrlEdit_AppendText($hLogFile, _LogDate()&" ["& $logLevelmsg&"] " & $s_text & @CRLF)
-		ConsoleWrite("!["& $logLevelmsg&"] " & $s_text & @CRLF)
+		FileWriteLine($hLogFile, _LogDate()&" ["& $logLevelmsg&"] " & $s_text )
+		ConsoleWrite($levelcolor&"["& $logLevelmsg&"] " & $s_text & @CRLF)
 	EndFunc   ;==>_ConsoleWrite
 	Func _LogDate()
 		$tCur = _Date_Time_GetLocalTime()
@@ -93,9 +97,9 @@
 	EndFunc
 	Func _EndLog()
 		ConsoleWrite('++_EndLog() = '& @crlf)
-		_GUICtrlEdit_AppendText($hLogFile,"..............................................................................." & @CRLF)
-		_GUICtrlEdit_AppendText($hLogFile,_NowCalcDate()   & @TAB& "End of activities")
-		_GUICtrlEdit_AppendText($hLogFile,"..............................................................................." & @CRLF& @CRLF)
+		FileWriteLine($hLogFile,"..............................................................................." )
+		FileWriteLine($hLogFile,_NowCalcDate()   & @TAB& "End of activities")
+		FileWriteLine($hLogFile,"..............................................................................." & @CRLF)
 		FileClose($hLogFile)
 	EndFunc
 #endregion

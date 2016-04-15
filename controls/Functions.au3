@@ -63,9 +63,13 @@
 	Func _GetServerDNSip()
 		ConsoleWrite('++_GetServerDNSip() = '& @crlf)
 		$fqdn=_GetFQDN()
-		_consolewrite("FQDN="&$fqdn)
-		$ip=_ReverseDNS($fqdn)
-		_consolewrite("ServerDNSip="&$ip)
+		_consolewrite("FQDN = "&$fqdn)
+		If @Compiled Then
+			$ip=_ReverseDNS($fqdn)
+		Else
+			$ip=@IPAddress1
+		endif
+		_consolewrite("ServerDNSip = "&$ip)
 		Return $ip
 	EndFunc
 #endregion

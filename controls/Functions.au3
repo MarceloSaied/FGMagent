@@ -6,13 +6,13 @@
 		ConsoleWrite('++_getToken() = '& @crlf)
 		$StartTicks = _GetUnixTime()
 		$EndTicks = $StartTicks + 60
-		Local $var1=_Hashing($passcode&$EndTicks,1)
+		Local $var1=_Hashing($passcode&@SEC&$EndTicks,1)
 		Return $var1
 	EndFunc
 	Func _IsValidToken($token)
 		ConsoleWrite('++_IsValidToken() = '&$token& @crlf)
 		Local $var1=_Hashing($token,0)
-		Local $tokenTicks=StringReplace($var1,$passcode,"")
+		Local $tokenTicks=StringTrimLeft(StringReplace($var1,$passcode,""),2)
 ;~ 		ConsoleWrite('-- Debug(' & @ScriptLineNumber & ') : $tokenTicks = ' & $tokenTicks & @crlf )
 		$NowTicks = _GetUnixTime()
 ;~ 		ConsoleWrite('-- Debug(' & @ScriptLineNumber & ') : $NowTicks = ' & $NowTicks & @crlf )

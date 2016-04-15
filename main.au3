@@ -46,11 +46,20 @@
 #endregion
 #region main
 	_startListener()
+	$ServiceIdleTimerInit=TimerInit()
 	While $ListenerActive
+		If _TCPacceptConnection() Then
 
+		endif
+
+		If TimerDiff($ServiceIdleTimerInit)>$ServiceIdletimeout And $ConnectedSocket = -1 Then ExitLoop
+;~ 	WaitResponse('START_UL','START_UL',50,60000)
 		Sleep(1000)
 	WEnd
 #endregion
 _stopListener()
 _Exit()
+
+
+
 

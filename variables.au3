@@ -15,7 +15,7 @@
 	$passcode="testeo"
 #endregion
 #region TCP Variables
-	Dim $sMaxConnections = 10
+;~ 	Dim $sMaxConnections = 10
 ;~ 	Dim $sSocket[$sMaxConnections], $sBuffer[$sMaxConnections], $iAuth[$sMaxConnections]
 	Global $sMainSocket =""
 
@@ -23,4 +23,10 @@
 	$nPort = 23
 	Global $listenerIP=""
 	Global $ListenerActive=1
+	Global $ConnectedSocket=-1
+#endregion
+
+#region  Service main
+	$ServiceIdletimeout=0
+	$ServiceIdleTimerInit=0
 #endregion

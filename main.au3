@@ -1,6 +1,6 @@
 #NoTrayIcon
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-#AutoIt3Wrapper_Icon=.\images\FGMagent.ico
+#AutoIt3Wrapper_Icon=.\images\marvin_robot.ico
 #AutoIt3Wrapper_Outfile=.\release\FGMagent.exe
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_UseUpx=n

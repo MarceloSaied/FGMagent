@@ -27,6 +27,6 @@
 #endregion
 
 #region  Service main
-	$ServiceIdletimeout=0
+	$ServiceIdletimeout=30000
 	$ServiceIdleTimerInit=0
 #endregion

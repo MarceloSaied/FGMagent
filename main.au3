@@ -51,10 +51,12 @@
 		If _TCPacceptConnection() Then
 
 		endif
-
-		If TimerDiff($ServiceIdleTimerInit)>$ServiceIdletimeout And $ConnectedSocket = -1 Then ExitLoop
+		If TimerDiff($ServiceIdleTimerInit)>$ServiceIdletimeout And $ConnectedSocket = -1 Then
+			_ConsoleWrite("Service Closing due timeout ("&$ServiceIdletimeout&")",1)
+			ExitLoop
+		EndIf
 ;~ 	WaitResponse('START_UL','START_UL',50,60000)
-		Sleep(1000)
+		Sleep(10)
 	WEnd
 #endregion
 _stopListener()

@@ -11,8 +11,6 @@
 
 	#include <GuiEdit.au3>
 	#include <String.au3>
-	Global Const $SC_CLOSE = 0xF060;
-
 #endregion
 #region UDFs
 	#include <..\udf\_ValidIP.au3>

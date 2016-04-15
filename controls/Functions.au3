@@ -204,8 +204,10 @@
 				If $recv Then
 					$BatRecv=StringReplace($recv,"OFR_BAT","")
 					$BatValid=FileExists($BatRecv)
-					_ConsoleWrite('Bat validation is  '&$BatValid,1)
-					If $BatValid Then
+					_ConsoleWrite('File validation is  '&$BatValid,1)
+					$BatIsBat=StringInStr(stringRight($BatRecv,4),".bat")
+					_ConsoleWrite('Bat extension validation is  '&$BatValid,1)
+					If $BatValid And $BatIsBat Then
 						TCPSend($ConnectedSocket, "BAT_OK")
 						Return true
 					Else

@@ -7,7 +7,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=FGM Agent - Management & Automation
 #AutoIt3Wrapper_Res_Description=File God Mode Agent service
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.9
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.10
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_ProductVersion=0.1
 #AutoIt3Wrapper_Res_LegalCopyright=Marcelo N. Saied & Roberto P Iralour . All rights reserved
@@ -52,7 +52,7 @@
 	While $ListenerActive
 		If _TCPacceptConnection() Then
 			If _AuthRequest() Then
-				MsgBox(0,"token ok","token ok")
+				_ConsoleWrite("Authenticatin request. Token OK, pass 1 access granted",3)
 
 			Else
 				_ConsoleWrite("Authenticatin request task failed ",3)

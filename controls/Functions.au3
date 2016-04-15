@@ -4,21 +4,20 @@
 #region  ================================== Helpers ======================================
 	Func _getToken()
 		ConsoleWrite('++_getToken() = '& @crlf)
-;~ 		$StartTicks = _TimeToTicks(@HOUR, @MIN, @SEC)
 		$StartTicks = _GetUnixTime()
-		$EndTicks = $StartTicks + 15
+		$EndTicks = $StartTicks + 60
 		Local $var1=_Hashing($passcode&$EndTicks,1)
 		Return $var1
 	EndFunc
 	Func _IsValidToken($token)
-		ConsoleWrite('++_ParseToken() = '&$token& @crlf)
+		ConsoleWrite('++_IsValidToken() = '&$token& @crlf)
 		Local $var1=_Hashing($token,0)
-		Local $var2=StringReplace($var1,$passcode,"")
-		ConsoleWrite('-- Debug(' & @ScriptLineNumber & ') : $var2 = ' & $var2 & @crlf )
-;~ 		$NowTicks = _TimeToTicks(@HOUR, @MIN, @SEC)
+		Local $tokenTicks=StringReplace($var1,$passcode,"")
+;~ 		ConsoleWrite('-- Debug(' & @ScriptLineNumber & ') : $tokenTicks = ' & $tokenTicks & @crlf )
 		$NowTicks = _GetUnixTime()
-		ConsoleWrite('-- Debug(' & @ScriptLineNumber & ') : $NowTicks = ' & $NowTicks & @crlf )
-		If $var2>$NowTicks Then
+;~ 		ConsoleWrite('-- Debug(' & @ScriptLineNumber & ') : $NowTicks = ' & $NowTicks & @crlf )
+;~ 		ConsoleWrite('-- Debug(' & @ScriptLineNumber & ') : $tokenTicks - $NowTicks  = ' & $tokenTicks - $NowTicks  & @crlf )
+		If $tokenTicks>$NowTicks Then
 			Return True
 		Else
 			Return false
@@ -121,25 +120,32 @@
 	EndFunc
 	Func _AuthRequest()
 		ConsoleWrite('++_AuthRequest() = '& @crlf)
-		$bitesSent=TCPSend($sMainSocket, "REQ_AUTH")
-		If $bitesSent>1 Then
-			$recv= _WaitResponse("OFR_CRED",100,60000)
-			If $recv Then
-				$tokenrecv=StringReplace($recv,"OFR_CRED","")
-				$tokenvalid=_IsValidToken($tokenrecv)
-				_ConsoleWrite('WAuthentication Token is  '&$tokenvalid,1)
-				If $tokenvalid Then
-					Return true
+		$bitesSent=TCPSend($ConnectedSocket, "REQ_AUTH")
+		$err=@error
+		If $err Then
+			If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. AuthRequest error '&$err,3)
+			_stopListener()
+			Return false
+		else
+			If $bitesSent>1 Then
+				$recv= _WaitResponse("OFR_CRED",100,60000)
+				If $recv Then
+					$tokenrecv=StringReplace($recv,"OFR_CRED","")
+					$tokenvalid=_IsValidToken($tokenrecv)
+					_ConsoleWrite('WAuthentication Token is  '&$tokenvalid,1)
+					If $tokenvalid Then
+						Return true
+					Else
+						_stopListener( )
+						Return false
+					endif
 				Else
-					_stopListener( )
 					Return false
 				endif
 			Else
+				_ConsoleWrite('Authentication canot be requestwed by REQ_AUTH',3)
 				Return false
 			endif
-		Else
-			_ConsoleWrite('Authorization canot be requestwed by REQ_AUTH',3)
-			Return false
 		endif
 	EndFunc
 
@@ -178,9 +184,9 @@
 			Case 10014
 				_ConsoleWrite("Bad address. The system detected an invalid pointer address in attempting to use a pointer argument of a call" ,3)
 			Case 10054 ;Connection reset by peer.
-				_ConsoleWrite('WaitResponse. onnection reset by peer '&$err,3)
-
-
+				_ConsoleWrite('Cnnection reset by peer. An existing connection was forcibly closed by the remote host.'&$err,3)
+			Case 10057
+				_ConsoleWrite('Socket is not connected.request to send or receive data was disallowed because the socket is not connected '&$err,3)
 			Case Else
 				Return false
 		EndSwitch
@@ -198,16 +204,20 @@
 		$inicio=TimerInit()
 		$TCPres=""
 		$respuesta=""
+		$sData=""
 		$res=0
+		$sBuffer=""
 		While 1
-			$respuesta=TCPRecv($sMainSocket, $bits)
-			ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $respuesta = ' & $respuesta & @crlf )
+			$sData=TCPRecv($ConnectedSocket, $bits)
 			$err=@error
 			If $err Then
-				If Not _checkerror($err) Then _ConsoleWrite('WaitResponse. error '&$err,3)
+				If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. WaitResponse. error '&$err,3)
 				_stopListener()
 				Return false
 			else
+				$sBuffer&= $sData
+				If StringInStr($sBuffer, @CRLF) Then $respuesta = $sBuffer
+
 				if $responseEspected<>"" then
 					$res=StringInStr($respuesta, $responseEspected)
 					select
@@ -220,6 +230,7 @@
 							Return $respuesta
 						case $respuesta<>""
 							_ConsoleWrite("TCPrecv =" & $respuesta , 2)
+							$respuesta=""
 	;~ 						Return $respuesta
 					EndSelect
 				Else

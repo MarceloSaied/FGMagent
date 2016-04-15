@@ -4,9 +4,10 @@
 #AutoIt3Wrapper_Outfile=.\release\FGMagent.exe
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_UseUpx=n
+#AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=FGM Agent - Management & Automation
 #AutoIt3Wrapper_Res_Description=File God Mode Agent service
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.2
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.3
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_ProductVersion=0.1
 #AutoIt3Wrapper_Res_LegalCopyright=Marcelo N. Saied & Roberto P Iralour . All rights reserved

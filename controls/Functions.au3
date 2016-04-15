@@ -296,7 +296,7 @@
 				Return false
 			else
 				$sBuffer&= $sData
-				If StringInStr($sBuffer, @CRLF) Then $respuesta = $sBuffer
+				If StringInStr($sBuffer, @CRLF) Then $respuesta = StringReplace($sBuffer,@crlf,"")
 
 				if $responseEspected<>"" then
 					$res=StringInStr($respuesta, $responseEspected)
@@ -306,10 +306,10 @@
 							_stopListener( )
 							Return false
 						case $res>0
-							_ConsoleWrite("TCPrecv =" & $respuesta , 1)
+							_ConsoleWrite("TCPrecv = " & $respuesta , 1)
 							Return $respuesta
 						case $respuesta<>""
-							_ConsoleWrite("TCPrecv =" & $respuesta , 2)
+							_ConsoleWrite("TCPrecv = " & $respuesta , 2)
 							$respuesta=""
 	;~ 						Return $respuesta
 					EndSelect

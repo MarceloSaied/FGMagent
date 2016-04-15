@@ -148,3 +148,27 @@
 		$ListenerActive=0
 	EndFunc   ;==>_CloseReceiveTCP
 #endregion
+#region =================================== TCP connection helpers   ========================================
+	Func _SocketToIP($SHOCKET)  ; Function to return IP Address from a connected socket.
+		Local $sockaddr, $aRet
+
+		$sockaddr = DllStructCreate("short;ushort;uint;char[8]")
+
+		$aRet = DllCall("Ws2_32.dll", "int", "getpeername", "int", $SHOCKET, _
+				"ptr", DllStructGetPtr($sockaddr), "int*", DllStructGetSize($sockaddr))
+		If Not @error And $aRet[0] = 0 Then
+			$aRet = DllCall("Ws2_32.dll", "str", "inet_ntoa", "int", DllStructGetData($sockaddr, 3))
+			If Not @error Then $aRet = $aRet[0]
+		Else
+			$aRet = 0
+		EndIf
+
+		$sockaddr = 0
+
+		Return $aRet
+	EndFunc   ;==>SocketToIP
+#endregion
+
+
+
+

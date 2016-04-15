@@ -71,9 +71,19 @@
 		_GUICtrlEdit_AppendText($hLogFile,_NowCalcDate()  & @TAB& "Start of activities"& @TAB& "Version: "& $version& @CRLF)
 		_GUICtrlEdit_AppendText($hLogFile,"==============================================================================="& @CRLF)
 	EndFunc
-	Func _ConsoleWrite($s_text)
-		_GUICtrlEdit_AppendText($hLogFile, _LogDate()&" "&$s_text & @CRLF)
-		ConsoleWrite($s_text & @CRLF)
+	Func _ConsoleWrite($s_text,$logLevel="1")
+		Switch $logLevel
+			Case 1
+				$logLevelmsg="INFO"
+			Case 2
+				$logLevelmsg="WARN"
+			Case 3
+				$logLevelmsg="ERROR"
+			Case Else
+				$logLevelmsg="NA"
+		EndSwitch
+		_GUICtrlEdit_AppendText($hLogFile, _LogDate()&" ["& $logLevelmsg&"] " & $s_text & @CRLF)
+		ConsoleWrite("!["& $logLevelmsg&"] " & $s_text & @CRLF)
 	EndFunc   ;==>_ConsoleWrite
 	Func _LogDate()
 		$tCur = _Date_Time_GetLocalTime()

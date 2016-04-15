@@ -104,7 +104,7 @@
 	EndFunc
 #endregion
 #region file check
-	Func ___IsFolder($sFolder,$SkipobtainAtributesFlag=0 )
+	Func _IsFolder($sFolder,$SkipobtainAtributesFlag=0 )
 		Local $sAttribute = FileGetAttrib($sFolder)
 		If @error Then
 			If $SkipobtainAtributesFlag=0 Then

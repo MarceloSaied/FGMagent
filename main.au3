@@ -33,11 +33,8 @@
 	_Licence()
 	_initLog()
 	_ReduceMemory()
-
-
-
-	; """""    testings  for token +++++++
 	#cs
+		; """""    testings  for token +++++++
 	$var=_getToken()
 	While 1
 			ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : _IsValidToken($var) = ' & _IsValidToken($var) & @crlf )
@@ -46,11 +43,9 @@
 		Sleep(1000)
 	WEnd
 	#ce
-	; ------------------------------------
 #endregion
 #region main
 	While 1
-
 		Sleep(1000)
 	WEnd
 #endregion

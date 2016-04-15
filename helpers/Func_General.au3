@@ -53,7 +53,7 @@
 		EndIf
 		_GUICtrlEdit_AppendText($hLogFile,"===============================================================================" & @CRLF)
 		_GUICtrlEdit_AppendText($hLogFile,"==============================================================================="& @CRLF)
-		_GUICtrlEdit_AppendText($hLogFile,_NowCalcDate()  & @TAB& "Version: "& $version& @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile,_NowCalcDate()  & @TAB& "Start of activities"& @TAB& "Version: "& $version& @CRLF)
 		_GUICtrlEdit_AppendText($hLogFile,"==============================================================================="& @CRLF)
 	EndFunc
 	Func _ConsoleWrite($s_text)
@@ -68,10 +68,9 @@
 	EndFunc
 	Func _EndLog()
 		ConsoleWrite('++_EndLog() = '& @crlf)
-		_GUICtrlEdit_AppendText($hLogFile,"===============================================================================" & @CRLF)
-		_GUICtrlEdit_AppendText($hLogFile,"===============================================================================" & @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile,"..............................................................................." & @CRLF)
 		_GUICtrlEdit_AppendText($hLogFile,_NowCalcDate()   & @TAB& "End of activities")
-		_GUICtrlEdit_AppendText($hLogFile,"===============================================================================" & @CRLF)
+		_GUICtrlEdit_AppendText($hLogFile............................................................................... & @CRLF& @CRLF)
 		FileClose($hLogFile)
 	EndFunc
 #endregion

@@ -152,49 +152,33 @@
 		ControlSend("[CLASS:SciTEWindow]", "", "Scintilla2", "+{F5}")
 	EndFunc
 #endregion
+#region time
+	Func _GetUnixTime($sDate = 0);Date Format: 2013/01/01 00:00:00 ~ Year/Mo/Da Hr:Mi:Se
+		Local $aSysTimeInfo = _Date_Time_GetTimeZoneInformation()
+		Local $utcTime = ""
+		If Not $sDate Then $sDate = _NowCalc()
+		If Int(StringLeft($sDate, 4)) < 1970 Then Return ""
+		If $aSysTimeInfo[0] = 2 Then
+			$utcTime = _DateAdd('n', $aSysTimeInfo[1] + $aSysTimeInfo[7], $sDate)
+		Else
+			$utcTime = _DateAdd('n', $aSysTimeInfo[1], $sDate)
+		EndIf
+		Return _DateDiff('s', "1970/01/01 00:00:00", $utcTime)
+	EndFunc   ;==>_GetUnixTime
+#endregion
 
 
-Func _ServerIP()
-	ConsoleWrite('++_ServerIP() = '& @crlf)
-	TCPStartup()
-	$serverip= TCPNameToIP(@ComputerName)
-	_ConsoleWrite("Server name ="&@ComputerName & @TAB & "server ip="&$serverip)
-	TCPShutdown()
-	Return $serverip
-EndFunc
-
-Func _GetUnixTime($sDate = 0);Date Format: 2013/01/01 00:00:00 ~ Year/Mo/Da Hr:Mi:Se
-
-    Local $aSysTimeInfo = _Date_Time_GetTimeZoneInformation()
-    Local $utcTime = ""
-
-    If Not $sDate Then $sDate = _NowCalc()
-
-    If Int(StringLeft($sDate, 4)) < 1970 Then Return ""
-
-    If $aSysTimeInfo[0] = 2 Then
-        $utcTime = _DateAdd('n', $aSysTimeInfo[1] + $aSysTimeInfo[7], $sDate)
-    Else
-        $utcTime = _DateAdd('n', $aSysTimeInfo[1], $sDate)
-    EndIf
-
-    Return _DateDiff('s', "1970/01/01 00:00:00", $utcTime)
-EndFunc   ;==>_GetUnixTime
+;~ Func _ServerIP()
+;~ 	ConsoleWrite('++_ServerIP() = '& @crlf)
+;~ 	TCPStartup()
+;~ 	$serverip= TCPNameToIP(@ComputerName)
+;~ 	_ConsoleWrite("Server name ="&@ComputerName & @TAB & "server ip="&$serverip)
+;~ 	TCPShutdown()
+;~ 	Return $serverip
+;~ EndFunc
 
 
-Global Const $oErrorHandler = ObjEvent("AutoIt.Error", "ObjErrorHandler")
-	Func ObjErrorHandler()
-		ConsoleWrite(   "A COM Error has occured!" & @CRLF  & @CRLF & _
-                                "err.description is: "    & @TAB & $oErrorHandler.description    & @CRLF & _
-                                "err.windescription:"     & @TAB & $oErrorHandler & @CRLF & _
-                                "err.number is: "         & @TAB & Hex($oErrorHandler.number, 8)  & @CRLF & _
-                                "err.lastdllerror is: "   & @TAB & $oErrorHandler.lastdllerror   & @CRLF & _
-                                "err.scriptline is: "     & @TAB & $oErrorHandler.scriptline     & @CRLF & _
-                                "err.source is: "         & @TAB & $oErrorHandler.source         & @CRLF & _
-                                "err.helpfile is: "       & @TAB & $oErrorHandler.helpfile       & @CRLF & _
-                                "err.helpcontext is: "    & @TAB & $oErrorHandler.helpcontext & @CRLF _
-                            )
-		EndFunc
+
 
 
 

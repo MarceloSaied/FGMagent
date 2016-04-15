@@ -43,13 +43,21 @@
 		Sleep(1000)
 	WEnd
 	#ce
+	$testToken=_getToken()
+	ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $testToken = ' & $testToken & @crlf )
 #endregion
 #region main
 	_startListener()
 	$ServiceIdleTimerInit=TimerInit()
 	While $ListenerActive
 		If _TCPacceptConnection() Then
+			If _AuthRequest() Then
+				MsgBox(0,"token ok","token ok")
 
+			Else
+				_ConsoleWrite("Authenticatin request task failed ",3)
+				ExitLoop
+			endif
 		endif
 		If TimerDiff($ServiceIdleTimerInit)>$ServiceIdletimeout And $ConnectedSocket = -1 Then
 			_ConsoleWrite("Service Closing due timeout ("&$ServiceIdletimeout&")",1)

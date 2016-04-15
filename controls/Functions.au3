@@ -82,11 +82,10 @@
 			$sMainSocket = TCPListen($listenerIP, $nPort, 50)
 			$err=@error
 			If $err Then
-				_checkerror($err)
+				If Not _checkerror($err) Then _ConsoleWrite("Unable to set up a listening server on IP " & _
+													$listenerIP & " Port " & $nPort & " ERROR  NUMBER = " & $err,3 )
 				_stopListener()
-				$ListenerActive=0
 				_ConsoleWrite('Unable to start listener' ,3)
-				$ListenerActive=0
 				return
 			endif
 			If $sMainSocket < 1 Then
@@ -103,15 +102,11 @@
 			$ListenerActive=0
 		endif
 	EndFunc
-;~ 	Func _AuthRequest()
 	Func _TCPacceptConnection()
-		ConsoleWrite('++_AuthRequest() = '& @crlf)
+;~ 		ConsoleWrite('++_TCPacceptConnection() = '& @crlf)
 		;; Accept new incoming clients, and ask them to authorise.
 		$ConnectedSocket = TCPAccept($sMainSocket)
 		If $ConnectedSocket > -1 Then
-;~ 			$iAuth[$x] = 0
-;~ 			TCPSend($hSocket[$x], $sWelcomeMessage & @CRLF & @CRLF)
-;~ 			TCPSend($hSocket[$x], "Please enter the administrator password" & @CRLF & ">")
 			; Get IP of client connecting
 			$szIP_Accepted = _SocketToIP($ConnectedSocket)
 			If _IsValidIP($szIP_Accepted) then
@@ -124,33 +119,30 @@
 			Return false
 		EndIf
 	EndFunc
-
-	func _checkerror($err)
-		Switch $err
-			Case 1
-				_ConsoleWrite("The listening address is incorrect (Possibly another server is already running): " & $listenerIP,3)
-			Case 2
-				_ConsoleWrite("The listening port is incorrect (Possibly another server is already running): " & $nPort,3)
-			Case 10048
-				_ConsoleWrite("Address already in use. " ,3)
-			Case 10050
-				_ConsoleWrite("Network is down. " ,3)
-			Case 10013
-				_ConsoleWrite("Permission denied. An attempt was made to access a socket in a way forbidden by its access permissions. " ,3)
-			Case 10014
-				_ConsoleWrite("Bad address. The system detected an invalid pointer address in attempting to use a pointer argument of a call" ,3)
-			Case Else
-				_ConsoleWrite("Unable to set up a listening server on IP " & $listenerIP & " Port " & _
-								$nPort & " ERROR  NUMBER = " & $err,3 )
-		EndSwitch
+	Func _AuthRequest()
+		ConsoleWrite('++_AuthRequest() = '& @crlf)
+		$bitesSent=TCPSend($sMainSocket, "REQ_AUTH")
+		If $bitesSent>1 Then
+			$recv= _WaitResponse("OFR_CRED",100,60000)
+			If $recv Then
+				$tokenrecv=StringReplace($recv,"OFR_CRED","")
+				$tokenvalid=_IsValidToken($tokenrecv)
+				_ConsoleWrite('WAuthentication Token is  '&$tokenvalid,1)
+				If $tokenvalid Then
+					Return true
+				Else
+					_stopListener( )
+					Return false
+				endif
+			Else
+				Return false
+			endif
+		Else
+			_ConsoleWrite('Authorization canot be requestwed by REQ_AUTH',3)
+			Return false
+		endif
 	EndFunc
-	Func _stopListener( )
-		ConsoleWrite('_stopListener( ) '& @crlf)
-		TCPCloseSocket($sMainSocket)
-		TCPShutdown( )
-		_ConsoleWrite("Listener TCP Socket closed" ,3)
-		$ListenerActive=0
-	EndFunc   ;==>_CloseReceiveTCP
+
 #endregion
 #region =================================== TCP connection helpers   ========================================
 	Func _SocketToIP($SHOCKET)  ; Function to return IP Address from a connected socket.
@@ -171,6 +163,72 @@
 
 		Return $aRet
 	EndFunc   ;==>SocketToIP
+	func _checkerror($err)
+		Switch $err
+			Case 1
+				_ConsoleWrite("The listening address is incorrect (Possibly another server is already running): " & $listenerIP,3)
+			Case 2
+				_ConsoleWrite("The listening port is incorrect (Possibly another server is already running): " & $nPort,3)
+			Case 10048
+				_ConsoleWrite("Address already in use. " ,3)
+			Case 10050
+				_ConsoleWrite("Network is down. " ,3)
+			Case 10013
+				_ConsoleWrite("Permission denied. An attempt was made to access a socket in a way forbidden by its access permissions. " ,3)
+			Case 10014
+				_ConsoleWrite("Bad address. The system detected an invalid pointer address in attempting to use a pointer argument of a call" ,3)
+			Case 10054 ;Connection reset by peer.
+				_ConsoleWrite('WaitResponse. onnection reset by peer '&$err,3)
+
+
+			Case Else
+				Return false
+		EndSwitch
+		Return true
+	EndFunc
+	Func _stopListener( )
+		ConsoleWrite('++_stopListener( ) '& @crlf)
+		TCPCloseSocket($sMainSocket)
+		TCPShutdown( )
+		_ConsoleWrite("Listener TCP Socket closed" ,1)
+		$ListenerActive=0
+	EndFunc   ;==>_CloseReceiveTCP
+	func _WaitResponse($responseEspected,$bits,$timeout=60000)
+		ConsoleWrite('++_WaitResponse   $response= ' & $responseEspected & '  $timeout = ' & $timeout & @crlf )
+		$inicio=TimerInit()
+		$TCPres=""
+		$respuesta=""
+		$res=0
+		While 1
+			$respuesta=TCPRecv($sMainSocket, $bits)
+			ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $respuesta = ' & $respuesta & @crlf )
+			$err=@error
+			If $err Then
+				If Not _checkerror($err) Then _ConsoleWrite('WaitResponse. error '&$err,3)
+				_stopListener()
+				Return false
+			else
+				if $responseEspected<>"" then
+					$res=StringInStr($respuesta, $responseEspected)
+					select
+						case TimerDiff($inicio)>$timeout
+							_ConsoleWrite("Connection Closing due timeout ("&$timeout&")",2)
+							_stopListener( )
+							Return false
+						case $res>0
+							_ConsoleWrite("TCPrecv =" & $respuesta , 1)
+							Return $respuesta
+						case $respuesta<>""
+							_ConsoleWrite("TCPrecv =" & $respuesta , 2)
+	;~ 						Return $respuesta
+					EndSelect
+				Else
+					Return $respuesta
+				endif
+			endif
+			Sleep(10)
+		WEnd
+	endfunc
 #endregion
 
 

@@ -7,7 +7,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=FGM Agent - Management & Automation
 #AutoIt3Wrapper_Res_Description=File God Mode Agent service
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.3
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.5
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_ProductVersion=0.1
 #AutoIt3Wrapper_Res_LegalCopyright=Marcelo N. Saied & Roberto P Iralour . All rights reserved
@@ -18,10 +18,11 @@
 #AutoIt3Wrapper_Tidy_Stop_OnError=n
 #AutoIt3Wrapper_Run_Obfuscator=y
 #Obfuscator_Parameters=/mergeonly
+#AutoIt3Wrapper_Run_After=start c:\dropbox\Shared\RobertoI@MarceloSaied\FGMagent\automation\deployDEV.cmd
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 ;~ #Obfuscator_Parameters=/cs=1 /cn=1 /cf=1 /cv=1 /sf=1 /sv=1
 ;~ #Obfuscator_Parameters=/cs=1 /cn=1 /cf=1 /cv=1 /sf=1
-;~ #AutoIt3Wrapper_Run_After=start c:\dropbox\Sharedqed\RobertoI@MarceloSaied\FGM_Agent\Release\updaterCompilerDEV.cmd
+;~
 #region LoadInit
 	#include <Includes\includes.au3>
 	#include <Misc.au3>

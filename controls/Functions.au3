@@ -124,25 +124,65 @@
 	EndFunc
 	Func _Authentication()
 		ConsoleWrite('++_Authentication() = '& @crlf)
+		$bitesSent=TCPSend($ConnectedSocket, "REQ_AUTH")
+		$err=@error
+		If $err Then
+			If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. AuthRequest error '&$err,3)
+			_stopListener()
+			Return false
+		else
+			If $bitesSent>1 Then
+				$recv= _WaitResponse("OFR_CRED",100,60000)
+				If $recv Then
+					$TokenRecv=StringReplace($recv,"OFR_CRED","")
+					If $UnitTest=0 Then
+						$TokenValid=_IsValidToken($tokenrecv)
+					Else
+						$TokenValid=true
+					endif
+					_ConsoleWrite('Authentication Token is  '&$TokenValid,1)
+					If $TokenValid Then
+						TCPSend($ConnectedSocket, "AUTH_OK")
+						Return true
+					Else
+						TCPSend($ConnectedSocket, "AUTH_DENY")
+						_stopListener( )
+						Return false
+					endif
+				Else
+					Return false
+				endif
+			Else
+				_ConsoleWrite('Authentication canot be requested by REQ_AUTH',3)
+				Return false
+			endif
+		endif
+	EndFunc
+	Func _Authorization()
+		ConsoleWrite('++_Authorization() = '& @crlf)
+		Return true
+	EndFunc
+	Func _PathRequest()
+		ConsoleWrite('++_PathRequest() = '& @crlf)
 		If $UnitTest=0 Then
-			$bitesSent=TCPSend($ConnectedSocket, "REQ_AUTH")
+			$bitesSent=TCPSend($ConnectedSocket, "REQ_PATH")
 			$err=@error
 			If $err Then
-				If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. AuthRequest error '&$err,3)
+				If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. PathRequest error '&$err,3)
 				_stopListener()
 				Return false
 			else
 				If $bitesSent>1 Then
-					$recv= _WaitResponse("OFR_CRED",100,60000)
+					$recv= _WaitResponse("OFR_PATH",1000,60000)
 					If $recv Then
-						$tokenrecv=StringReplace($recv,"OFR_CRED","")
-						$tokenvalid=_IsValidToken($tokenrecv)
-						_ConsoleWrite('Authentication Token is  '&$tokenvalid,1)
-						If $tokenvalid Then
-							TCPSend($ConnectedSocket, "AUTH_OK")
+						$PathRecv=StringReplace($recv,"OFR_PATH","")
+						$PathValid=_IsFolder($Pathrecv)
+						_ConsoleWrite('Path validation is  '&$PathValid,1)
+						If $PathValid Then
+							TCPSend($ConnectedSocket, "PATH_OK")
 							Return true
 						Else
-							TCPSend($ConnectedSocket, "AUTH_DENY")
+							TCPSend($ConnectedSocket, "PATH_DENY")
 							_stopListener( )
 							Return false
 						endif
@@ -150,7 +190,7 @@
 						Return false
 					endif
 				Else
-					_ConsoleWrite('Authentication canot be requestwed by REQ_AUTH',3)
+					_ConsoleWrite('Path canot be requested by REQ_PATH',3)
 					Return false
 				endif
 			endif
@@ -158,9 +198,41 @@
 			Return true
 		EndIf
 	EndFunc
-	Func _Authorization()
-		ConsoleWrite('++_Authorization() = '& @crlf)
-		Return true
+	Func _BatRequest()
+		ConsoleWrite('++_BatRequest() = '& @crlf)
+		If $UnitTest=0 Then
+			$bitesSent=TCPSend($ConnectedSocket, "REQ_BAT")
+			$err=@error
+			If $err Then
+				If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. BatRequest error '&$err,3)
+				_stopListener()
+				Return false
+			else
+				If $bitesSent>1 Then
+					$recv= _WaitResponse("OFR_BAT",1000,60000)
+					If $recv Then
+						$BatRecv=StringReplace($recv,"OFR_BAT","")
+						$BatValid=FileExists($BatRecv)
+						_ConsoleWrite('Bat validation is  '&$BatValid,1)
+						If $BatValid Then
+							TCPSend($ConnectedSocket, "BAT_OK")
+							Return true
+						Else
+							TCPSend($ConnectedSocket, "BAT_DENY")
+							_stopListener( )
+							Return false
+						endif
+					Else
+						Return false
+					endif
+				Else
+					_ConsoleWrite('Bat canot be requested by REQ_BAT',3)
+					Return false
+				endif
+			endif
+		Else
+			Return true
+		EndIf
 	EndFunc
 #endregion
 #region =================================== TCP connection helpers   ========================================

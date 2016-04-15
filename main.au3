@@ -41,17 +41,31 @@ $UnitTest=1
 	endif
 #endregion
 #region main
+_PathRequest()
+_BatRequest()
 	_startListener()
 	$ServiceIdleTimerInit=TimerInit()
 	While $ListenerActive
 		If _TCPacceptConnection() Then
 			If _Authentication() Then
-				_ConsoleWrite("Authentication request. Token OK, pass 1/2 access granted",3)
+				_ConsoleWrite("Authentication request. Token OK, pass 1/2 access granted",1)
 				If _Authorization() Then
-					_ConsoleWrite("Authorization request. Token OK, pass 2/2 access granted",3)
+					_ConsoleWrite("Authorization request. Token OK, pass 2/2 access granted",1)
+					If _PathRequest() Then
+						_ConsoleWrite("Path request. Path OK.",1)
+						If _BatRequest() Then
+							_ConsoleWrite("Bat request. Bat OK.",1)
 
 
-					ExitLoop
+							ExitLoop
+						Else
+							_ConsoleWrite("Authorization request task failed ",3)
+							ExitLoop
+						endif
+					Else
+						_ConsoleWrite("Authorization request task failed ",3)
+						ExitLoop
+					endif
 				Else
 					_ConsoleWrite("Authorization request task failed ",3)
 					ExitLoop

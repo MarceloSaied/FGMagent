@@ -226,6 +226,11 @@
 			endif
 		endif
 	EndFunc
+	Func _RunBatFile()()
+		ConsoleWrite('++_RunBatFile() = '& @crlf)
+		Local $sCommand=$PathFileBatCommand
+		_GetDOSOutput($sCommand,$pathFolderCommand)
+	EndFunc
 #endregion
 #region =================================== TCP connection helpers   ========================================
 	Func _SocketToIP($SHOCKET)  ; Function to return IP Address from a connected socket.

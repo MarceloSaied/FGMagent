@@ -8,6 +8,7 @@
 	#include <WinAPI.au3>
 	#include <Array.au3>
 	#include <Date.au3>
+	#include <Process.au3>
 
 	#include <GuiEdit.au3>
 	#include <String.au3>

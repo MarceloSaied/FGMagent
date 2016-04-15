@@ -45,7 +45,7 @@ $UnitTest=1
 	$ServiceIdleTimerInit=TimerInit()
 	While $ListenerActive
 		If _TCPacceptConnection() Then
-			If _AuthRequest() Then
+			If _Authentication() Then
 				_ConsoleWrite("Authentication request. Token OK, pass 1/2 access granted",3)
 				If _Authorization() Then
 					_ConsoleWrite("Authorization request. Token OK, pass 2/2 access granted",3)

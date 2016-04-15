@@ -122,8 +122,8 @@
 			Return true
 		endif
 	EndFunc
-	Func _AuthRequest()
-		ConsoleWrite('++_AuthRequest() = '& @crlf)
+	Func _Authentication()
+		ConsoleWrite('++_Authentication() = '& @crlf)
 		If $UnitTest=0 Then
 			$bitesSent=TCPSend($ConnectedSocket, "REQ_AUTH")
 			$err=@error
@@ -139,8 +139,10 @@
 						$tokenvalid=_IsValidToken($tokenrecv)
 						_ConsoleWrite('Authentication Token is  '&$tokenvalid,1)
 						If $tokenvalid Then
+							TCPSend($ConnectedSocket, "AUTH_OK")
 							Return true
 						Else
+							TCPSend($ConnectedSocket, "AUTH_DENY")
 							_stopListener( )
 							Return false
 						endif

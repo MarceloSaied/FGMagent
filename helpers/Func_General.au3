@@ -107,7 +107,7 @@
 	EndFunc   ;==>ByteSuffix
 #endregion
 #region stdout
-	Func _GetDOSOutput($sCommand,$sWorkingdir)
+	Func _GetDOSOutput($sCommand,$sWorkingdir="")
 	   Local $iPID, $sOutput = ""
 	   $iPID = Run('"' & @ComSpec & '" /c ' & $sCommand, $sWorkingdir, @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
 	   Local $begin = TimerInit()

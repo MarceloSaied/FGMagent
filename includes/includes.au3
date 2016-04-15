@@ -17,7 +17,7 @@
 
 #region application
 	#include <../variables.au3>
-	#include <../controls/functions.au3>
 	#include <../helpers/func_General.au3>
-	#include <../controls/controls.au3>
+	#include <../controls/functions.au3>
+;~ 	#include <../controls/controls.au3>
 #endregion

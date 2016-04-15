@@ -45,7 +45,8 @@
 	#ce
 #endregion
 #region main
-	While 1
+
+	While $ListenerActive
 		_startListener()
 		Sleep(1000)
 	WEnd

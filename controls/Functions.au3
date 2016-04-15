@@ -64,7 +64,6 @@
 		ConsoleWrite('++_GetServerDNSip() = '& @crlf)
 		$fqdn=_GetFQDN()
 		_consolewrite("FQDN="&$fqdn)
-
 		$ip=_ReverseDNS($fqdn)
 		_consolewrite("ServerDNSip="&$ip)
 		Return $ip

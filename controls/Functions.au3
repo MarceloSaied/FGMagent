@@ -174,6 +174,7 @@
 					$PathValid=_IsFolder($Pathrecv)
 					_ConsoleWrite('Path validation is  '&$PathValid,1)
 					If $PathValid Then
+						$pathFolderCommand=$PathRecv
 						TCPSend($ConnectedSocket, "PATH_OK")
 						Return true
 					Else
@@ -203,11 +204,12 @@
 				$recv= _WaitResponse("OFR_BAT",1000,60000)
 				If $recv Then
 					$BatRecv=StringReplace($recv,"OFR_BAT","")
-					$BatValid=FileExists($BatRecv)
+					$BatValid=FileExists($pathFolderCommand&"\"&$BatRecv)
 					_ConsoleWrite('File validation is  '&$BatValid,1)
 					$BatIsBat=StringInStr(stringRight($BatRecv,4),".bat")
 					_ConsoleWrite('Bat extension validation is  '&$BatValid,1)
 					If $BatValid And $BatIsBat Then
+						$PathFileBatCommand=$pathFolderCommand&"\"&$BatRecv
 						TCPSend($ConnectedSocket, "BAT_OK")
 						Return true
 					Else

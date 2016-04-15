@@ -25,8 +25,11 @@
 	Global $ListenerActive=1
 	Global $ConnectedSocket=-1
 #endregion
-
 #region  Service main
 	$ServiceIdletimeout=30000
 	$ServiceIdleTimerInit=0
+#endregion
+#region Command execution
+	Global $pathFolderCommand=""
+	Global $PathFileBatCommand=""
 #endregion

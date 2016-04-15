@@ -24,6 +24,21 @@
 		FileClose($hLogFile)
 	EndFunc   ;==>_Exit( )
 #endregion
+#region Error Handeler
+	Global Const $oErrorHandler = ObjEvent("AutoIt.Error", "ObjErrorHandler")
+	Func ObjErrorHandler()
+		ConsoleWrite(   "A COM Error has occured!" & @CRLF  & @CRLF & _
+                                "err.description is: "    & @TAB & $oErrorHandler.description    & @CRLF & _
+                                "err.windescription:"     & @TAB & $oErrorHandler & @CRLF & _
+                                "err.number is: "         & @TAB & Hex($oErrorHandler.number, 8)  & @CRLF & _
+                                "err.lastdllerror is: "   & @TAB & $oErrorHandler.lastdllerror   & @CRLF & _
+                                "err.scriptline is: "     & @TAB & $oErrorHandler.scriptline     & @CRLF & _
+                                "err.source is: "         & @TAB & $oErrorHandler.source         & @CRLF & _
+                                "err.helpfile is: "       & @TAB & $oErrorHandler.helpfile       & @CRLF & _
+                                "err.helpcontext is: "    & @TAB & $oErrorHandler.helpcontext & @CRLF _
+                            )
+	EndFunc
+#endregion
 #region Firewall
 	Func ___SetFirewall()
 		$f_sav = @ScriptDir & '\Pocket-SF.sav'

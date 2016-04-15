@@ -52,10 +52,16 @@
 	While $ListenerActive
 		If _TCPacceptConnection() Then
 			If _AuthRequest() Then
-				_ConsoleWrite("Authenticatin request. Token OK, pass 1 access granted",3)
+				_ConsoleWrite("Authentication request. Token OK, pass 1/2 access granted",3)
+				If _Authorization() Then
+					_ConsoleWrite("Authorization request. Token OK, pass 2/2 access granted",3)
 
+				Else
+					_ConsoleWrite("Authorization request task failed ",3)
+					ExitLoop
+				endif
 			Else
-				_ConsoleWrite("Authenticatin request task failed ",3)
+				_ConsoleWrite("Authentication request task failed ",3)
 				ExitLoop
 			endif
 		endif

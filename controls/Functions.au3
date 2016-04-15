@@ -148,7 +148,10 @@
 			endif
 		endif
 	EndFunc
-
+	Func _Authorization()
+		ConsoleWrite('++_Authorization() = '& @crlf)
+		Return true
+	EndFunc
 #endregion
 #region =================================== TCP connection helpers   ========================================
 	Func _SocketToIP($SHOCKET)  ; Function to return IP Address from a connected socket.

@@ -163,6 +163,12 @@
 	EndFunc
 #endregion
 #region time
+	Func  Sec2Time($nr_sec)
+		$sec2time_hour = Int($nr_sec / 3600)
+		$sec2time_min = Int(($nr_sec - $sec2time_hour * 3600) / 60)
+		$sec2time_sec = $nr_sec - $sec2time_hour * 3600 - $sec2time_min * 60
+		Return StringFormat('%02d:%02d:%02d', $sec2time_hour, $sec2time_min, $sec2time_sec)
+	EndFunc   ;==>Sec2Time
 	Func _GetUnixTime($sDate = 0);Date Format: 2013/01/01 00:00:00 ~ Year/Mo/Da Hr:Mi:Se
 		Local $aSysTimeInfo = _Date_Time_GetTimeZoneInformation()
 		Local $utcTime = ""

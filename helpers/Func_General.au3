@@ -12,7 +12,7 @@
 		Return $ai_Return[0]
 	EndFunc
 	Func _Licence()
-		ConsoleWrite('++_Licence() = '& @crlf)
+;~ 		ConsoleWrite('++_Licence() = '& @crlf)
 		If @Compiled Then
 			Local $iDateCalc = _DateDiff('s', "2016/12/8 00:00:00", _NowCalc())
 			If $iDateCalc > 0 Then Exit
@@ -138,6 +138,7 @@
 	Func _GetDOSOutput($sCommand,$sWorkingdir="")
 	   Local $iPID, $sOutput = ""
 	   $iPID = Run('"' & @ComSpec & '" /c ' & $sCommand, $sWorkingdir, @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
+	   ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $iPID = ' & $iPID & @crlf )
 	   Local $begin = TimerInit()
 	   While TimerDiff($begin) < 180000  ;180 sec
 		   $sOutput &= StdoutRead($iPID, False, False)

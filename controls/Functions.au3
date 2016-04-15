@@ -226,8 +226,8 @@
 			endif
 		endif
 	EndFunc
-	Func _RunBatFile()()
-		ConsoleWrite('++_RunBatFile() = '& @crlf)
+	Func _RunBatFile()
+		ConsoleWrite('++_RunBatFile() = '&$PathFileBatCommand& @crlf)
 		$msgresult=_GetDOSOutput($PathFileBatCommand,$pathFolderCommand)
 		_SendResults($msgresult)
 	EndFunc

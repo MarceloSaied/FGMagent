@@ -1,5 +1,5 @@
 #REGION GENERAL
-	Global $oMyError = ObjEvent("AutoIt.Error","MyErrFunc")
+;~ 	Global $oMyError = ObjEvent("AutoIt.Error","MyErrFunc")
 	$version= FileGetVersion(@ScriptName)
 	$workDir="c:\temp"
 	$ProgramdataDir="c:\ProgramData"
@@ -15,9 +15,12 @@
 	$passcode="testeo"
 #endregion
 #region TCP Variables
-Dim $sMaxConnections = 10
-Dim $sSocket[$sMaxConnections], $sBuffer[$sMaxConnections], $iAuth[$sMaxConnections]
+	Dim $sMaxConnections = 10
+;~ 	Dim $sSocket[$sMaxConnections], $sBuffer[$sMaxConnections], $iAuth[$sMaxConnections]
+	Global $sMainSocket =""
 
-;; TCP Options
-Dim $sIPAddress = @IPAddress1, $nPort = 23
+	;; TCP Options
+	$nPort = 23
+	Global $listenerIP=""
+	Global $ListenerActive=1
 #endregion

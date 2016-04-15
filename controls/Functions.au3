@@ -72,11 +72,32 @@
 #region =================================== listener   ========================================
 	Func _startListener()
 		ConsoleWrite('++_startListener() = '& @crlf)
-
-	EndFunc
-	Func _stopListener()
-		ConsoleWrite('++_stopListener() = '& @crlf)
-
+		$listenerIP=_GetServerDNSip()
+		If _IsValidIP($listenerIP) Then
+			TCPStartup()
+			$sMainSocket = TCPListen($listenerIP, $nPort, 50)
+			$err=@error
+			If $err Then
+				_checkerror($err)
+				_stopListener()
+				$ListenerActive=0
+				_ConsoleWrite('Unable to start listener' ,3)
+				$ListenerActive=0
+				return
+			endif
+			If $sMainSocket < 1 Then
+				_ConsoleWrite("TCP Socket connot be created " ,3)
+				_ConsoleWrite('Unable to start listener' ,3)
+				$ListenerActive=0
+				Return
+			Else
+				_consolewrite("Listener Active on IP " & $listenerIP & " Port " & $nPort)
+				$ListenerActive=1
+			EndIf
+		Else
+			_consolewrite("Not Valid IP",3)
+			$ListenerActive=0
+		endif
 	EndFunc
 
 

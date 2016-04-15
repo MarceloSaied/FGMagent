@@ -46,8 +46,10 @@
 #endregion
 #region main
 	While 1
+		_startListener()
 		Sleep(1000)
 	WEnd
 #endregion
+_stopListener()
 _Exit()
 

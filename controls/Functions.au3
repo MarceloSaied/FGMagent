@@ -60,8 +60,6 @@
 			Return SetError(3, 0, "")
 		EndIf
 	EndFunc
-#endregion
-#region =================================== listener   ========================================
 	Func _GetServerDNSip()
 		ConsoleWrite('++_GetServerDNSip() = '& @crlf)
 		$fqdn=_GetFQDN()
@@ -71,9 +69,16 @@
 		_consolewrite("ServerDNSip="&$ip)
 		Return $ip
 	EndFunc
+#endregion
+#region =================================== listener   ========================================
+	Func _startListener()
+		ConsoleWrite('++_startListener() = '& @crlf)
 
+	EndFunc
+	Func _stopListener()
+		ConsoleWrite('++_stopListener() = '& @crlf)
 
-
+	EndFunc
 
 
 	func checkerror($err)

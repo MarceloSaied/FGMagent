@@ -59,7 +59,7 @@
 		Sleep(10)
 	WEnd
 #endregion
-_stopListener()
+If @Compiled Then  _stopListener()
 _Exit()
 
 

@@ -24,7 +24,6 @@
 			Return false
 		endif
 	EndFunc
-
 	Func _ReverseDNS($IPAddress)
 		ConsoleWrite('++_ReverseDNS() = '& $IPAddress & @crlf)
 		$IPAddress = StringStripWS($IPAddress,3)
@@ -74,5 +73,24 @@
 	EndFunc
 
 
+
+
+
+	func checkerror($err)
+		Switch $err
+			Case 10048
+				ConsoleWrite("!!  Address already in use. " & @crlf)
+			Case 10050
+				ConsoleWrite("!!  Network is down. " & @crlf)
+			Case Else
+				ConsoleWrite("!!  ERROR  NUMBER = " & $err  &  @crlf)
+		EndSwitch
+	EndFunc
+;~ 	Func _CloseReceiveTCP( )
+;~ 		ConsoleWrite('_CloseReceiveTCP( ) '& @crlf)
+;~ 		TCPCloseSocket($f_Socket)
+;~ 		FileClose($f_fopen)
+;~ 		TCPShutdown( )
+;~ 	EndFunc   ;==>_CloseReceiveTCP
 
 #endregion

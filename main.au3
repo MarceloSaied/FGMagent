@@ -22,29 +22,35 @@
 ;~ #Obfuscator_Parameters=/cs=1 /cn=1 /cf=1 /cv=1 /sf=1
 ;~ #AutoIt3Wrapper_Run_After=start c:\dropbox\Sharedqed\RobertoI@MarceloSaied\FGM_Agent\Release\updaterCompilerDEV.cmd
 #region LoadInit
-		#include <Includes\includes.au3>
-		#include <Misc.au3>
-		If _Singleton(@ScriptName, 1) = 0 Then ; allow only one instance
-			_ConsoleWrite("Warning - An occurence of " & @ScriptName & " is already running")
-			Exit
-		EndIf
-		_Licence()
-		_initLog()
-		_ReduceMemory()
-;~ 		Opt("GUIOnEventMode", 1)
-;~ 		AutoItSetOption("WinTitleMatchMode", 4)
-;~ 		GUIRegisterMsg($WM_COMMAND, "WM_COMMAND")
-;~ 		GUIRegisterMsg($WM_SYSCOMMAND, "WM_SYSCOMMAND")
-;~ 		GUIRegisterMsg($WM_NOTIFY, "WM_NOTIFY")
+	#include <Includes\includes.au3>
+	#include <Misc.au3>
+	If _Singleton(@ScriptName, 1) = 0 Then ; allow only one instance
+		_ConsoleWrite("Warning - An occurence of " & @ScriptName & " is already running")
+		Exit
+	EndIf
+	_Licence()
+	_initLog()
+	_ReduceMemory()
 
-;~ 		_ConfigDBInitial()
-		$var=_getToken()
+
+
+	; """""    testings  for token +++++++
+	#cs
+	$var=_getToken()
+	While 1
+			ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : _IsValidToken($var) = ' & _IsValidToken($var) & @crlf )
+			ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $var = ' & $var & @crlf )
+
+		Sleep(1000)
+	WEnd
+	#ce
+	; ------------------------------------
 #endregion
-While 1
-		ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : _IsValidToken($var) = ' & _IsValidToken($var) & @crlf )
-		ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $var = ' & $var & @crlf )
+#region main
+	While 1
 
-	Sleep(1000)
-WEnd
+		Sleep(1000)
+	WEnd
+#endregion
 _Exit()
 

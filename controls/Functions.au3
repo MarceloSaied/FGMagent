@@ -267,11 +267,18 @@
 			Case 10013
 				_ConsoleWrite("Permission denied. An attempt was made to access a socket in a way forbidden by its access permissions. " ,3)
 			Case 10014
-				_ConsoleWrite("Bad address. The system detected an invalid pointer address in attempting to use a pointer argument of a call" ,3)
+				_ConsoleWrite("Bad address. The system detected an invalid pointer address in attempting to use a pointer argument of a call." ,3)
 			Case 10054 ;Connection reset by peer.
 				_ConsoleWrite('Cnnection reset by peer. An existing connection was forcibly closed by the remote host.'&$err,3)
 			Case 10057
-				_ConsoleWrite('Socket is not connected.request to send or receive data was disallowed because the socket is not connected '&$err,3)
+				_ConsoleWrite('Socket is not connected.request to send or receive data was disallowed because the socket is not connected.'&$err,3)
+			Case 10038
+				_ConsoleWrite('Socket operation on nonsocket. An operation was attempted on something that is not a socket.'&$err,3)
+
+
+
+
+
 			Case Else
 				Return false
 		EndSwitch

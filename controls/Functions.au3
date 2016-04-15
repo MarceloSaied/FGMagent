@@ -228,8 +228,21 @@
 	EndFunc
 	Func _RunBatFile()()
 		ConsoleWrite('++_RunBatFile() = '& @crlf)
-		Local $sCommand=$PathFileBatCommand
-		_GetDOSOutput($sCommand,$pathFolderCommand)
+		$msgresult=_GetDOSOutput($PathFileBatCommand,$pathFolderCommand)
+		_SendResults($msgresult)
+	EndFunc
+	Func _SendResults($msgresult)
+		ConsoleWrite('++_SendResults() = '& @crlf)
+		$bitesSent=TCPSend($ConnectedSocket, $msgresult)
+		$err=@error
+		If $err Then
+			If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. SendResults error '&$err,3)
+			_ConsoleWrite($msgresult,1)
+			_stopListener()
+			Return false
+		else
+			Return true
+		endif
 	EndFunc
 #endregion
 #region =================================== TCP connection helpers   ========================================

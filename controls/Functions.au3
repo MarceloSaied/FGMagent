@@ -132,7 +132,7 @@
 				If $recv Then
 					$tokenrecv=StringReplace($recv,"OFR_CRED","")
 					$tokenvalid=_IsValidToken($tokenrecv)
-					_ConsoleWrite('WAuthentication Token is  '&$tokenvalid,1)
+					_ConsoleWrite('Authentication Token is  '&$tokenvalid,1)
 					If $tokenvalid Then
 						Return true
 					Else

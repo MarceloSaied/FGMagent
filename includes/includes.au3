@@ -14,6 +14,7 @@
 #endregion
 #region UDFs
 	#include <..\udf\_ValidIP.au3>
+	#include <../udf/AD.au3>
 #endregion
 #region application
 	#include <../variables.au3>

@@ -34,18 +34,11 @@ $UnitTest=1
 	_Licence()
 	_initLog()
 	_ReduceMemory()
-	#cs
-		; """""    testings  for token +++++++
-	$var=_getToken()
-	While 1
-			ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : _IsValidToken($var) = ' & _IsValidToken($var) & @crlf )
-			ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $var = ' & $var & @crlf )
 
-		Sleep(1000)
-	WEnd
-	#ce
-	$testToken=_getToken()
-	ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $testToken = ' & $testToken & @crlf )
+	If $UnitTest=0 And (Not @Compiled) Then
+		$testToken=_getToken()
+		ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $testToken = ' & $testToken & @crlf )
+	endif
 #endregion
 #region main
 	_startListener()
@@ -57,6 +50,8 @@ $UnitTest=1
 				If _Authorization() Then
 					_ConsoleWrite("Authorization request. Token OK, pass 2/2 access granted",3)
 
+
+					ExitLoop
 				Else
 					_ConsoleWrite("Authorization request task failed ",3)
 					ExitLoop

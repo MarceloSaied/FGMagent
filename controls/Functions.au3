@@ -99,7 +99,27 @@
 			$ListenerActive=0
 		endif
 	EndFunc
-
+;~ 	Func _AuthRequest()
+	Func _TCPacceptConnection()
+		ConsoleWrite('++_AuthRequest() = '& @crlf)
+		;; Accept new incoming clients, and ask them to authorise.
+		$ConnectedSocket = TCPAccept($sMainSocket)
+		If $ConnectedSocket > -1 Then
+;~ 			$iAuth[$x] = 0
+;~ 			TCPSend($hSocket[$x], $sWelcomeMessage & @CRLF & @CRLF)
+;~ 			TCPSend($hSocket[$x], "Please enter the administrator password" & @CRLF & ">")
+			; Get IP of client connecting
+			$szIP_Accepted = _SocketToIP($ConnectedSocket)
+			If _IsValidIP($szIP_Accepted) then
+				_ConsoleWrite("Client connected IP "& $szIP_Accepted,1)
+			Else
+				_ConsoleWrite("Client connected IP not valid "& $szIP_Accepted,2)
+			endif
+			Return true
+		Else
+			Return false
+		EndIf
+	EndFunc
 
 	func _checkerror($err)
 		Switch $err

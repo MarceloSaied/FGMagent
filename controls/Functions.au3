@@ -103,50 +103,58 @@
 	EndFunc
 	Func _TCPacceptConnection()
 ;~ 		ConsoleWrite('++_TCPacceptConnection() = '& @crlf)
-		;; Accept new incoming clients, and ask them to authorise.
-		$ConnectedSocket = TCPAccept($sMainSocket)
-		If $ConnectedSocket > -1 Then
-			; Get IP of client connecting
-			$szIP_Accepted = _SocketToIP($ConnectedSocket)
-			If _IsValidIP($szIP_Accepted) then
-				_ConsoleWrite("Client connected IP "& $szIP_Accepted,1)
+		If $UnitTest=0 Then
+			;; Accept new incoming clients, and ask them to authorise.
+			$ConnectedSocket = TCPAccept($sMainSocket)
+			If $ConnectedSocket > -1 Then
+				; Get IP of client connecting
+				$szIP_Accepted = _SocketToIP($ConnectedSocket)
+				If _IsValidIP($szIP_Accepted) then
+					_ConsoleWrite("Client connected IP "& $szIP_Accepted,1)
+				Else
+					_ConsoleWrite("Client connected IP not valid "& $szIP_Accepted,2)
+				endif
+				Return true
 			Else
-				_ConsoleWrite("Client connected IP not valid "& $szIP_Accepted,2)
-			endif
-			Return true
+				Return false
+			EndIf
 		Else
-			Return false
-		EndIf
+			Return true
+		endif
 	EndFunc
 	Func _AuthRequest()
 		ConsoleWrite('++_AuthRequest() = '& @crlf)
-		$bitesSent=TCPSend($ConnectedSocket, "REQ_AUTH")
-		$err=@error
-		If $err Then
-			If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. AuthRequest error '&$err,3)
-			_stopListener()
-			Return false
-		else
-			If $bitesSent>1 Then
-				$recv= _WaitResponse("OFR_CRED",100,60000)
-				If $recv Then
-					$tokenrecv=StringReplace($recv,"OFR_CRED","")
-					$tokenvalid=_IsValidToken($tokenrecv)
-					_ConsoleWrite('Authentication Token is  '&$tokenvalid,1)
-					If $tokenvalid Then
-						Return true
+		If $UnitTest=0 Then
+			$bitesSent=TCPSend($ConnectedSocket, "REQ_AUTH")
+			$err=@error
+			If $err Then
+				If Not _checkerror($err) Then _ConsoleWrite('Unhandled exception. AuthRequest error '&$err,3)
+				_stopListener()
+				Return false
+			else
+				If $bitesSent>1 Then
+					$recv= _WaitResponse("OFR_CRED",100,60000)
+					If $recv Then
+						$tokenrecv=StringReplace($recv,"OFR_CRED","")
+						$tokenvalid=_IsValidToken($tokenrecv)
+						_ConsoleWrite('Authentication Token is  '&$tokenvalid,1)
+						If $tokenvalid Then
+							Return true
+						Else
+							_stopListener( )
+							Return false
+						endif
 					Else
-						_stopListener( )
 						Return false
 					endif
 				Else
+					_ConsoleWrite('Authentication canot be requestwed by REQ_AUTH',3)
 					Return false
 				endif
-			Else
-				_ConsoleWrite('Authentication canot be requestwed by REQ_AUTH',3)
-				Return false
 			endif
-		endif
+		Else
+			Return true
+		EndIf
 	EndFunc
 	Func _Authorization()
 		ConsoleWrite('++_Authorization() = '& @crlf)

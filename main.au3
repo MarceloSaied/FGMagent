@@ -23,6 +23,7 @@
 ;~ #Obfuscator_Parameters=/cs=1 /cn=1 /cf=1 /cv=1 /sf=1 /sv=1
 ;~ #Obfuscator_Parameters=/cs=1 /cn=1 /cf=1 /cv=1 /sf=1
 ;~
+$UnitTest=1
 #region LoadInit
 	#include <Includes\includes.au3>
 	#include <Misc.au3>

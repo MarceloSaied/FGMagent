@@ -54,7 +54,6 @@ $UnitTest=1
 						If _BatRequest() Then
 							_ConsoleWrite("Bat request. Bat OK.",1)
 							_RunBatFile()
-
 							ExitLoop
 						Else
 							_ConsoleWrite("Authorization request task failed ",3)

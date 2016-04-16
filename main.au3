@@ -23,7 +23,7 @@
 ;~ #Obfuscator_Parameters=/cs=1 /cn=1 /cf=1 /cv=1 /sf=1 /sv=1
 ;~ #Obfuscator_Parameters=/cs=1 /cn=1 /cf=1 /cv=1 /sf=1
 ;~
-$UnitTest=1
+$UnitTest=0
 #region LoadInit
 	#include <Includes\includes.au3>
 	#include <Misc.au3>
@@ -42,19 +42,24 @@ $UnitTest=1
 #endregion
 #region main
 	_startListener()
-	$ServiceIdleTimerInit=TimerInit()
-	While $ListenerActive
-		If _TCPacceptConnection() Then
-			If _Authentication() Then
-				_ConsoleWrite("Authentication request. Token OK, pass 1/2 access granted",1)
-				If _Authorization() Then
-					_ConsoleWrite("Authorization request. Token OK, pass 2/2 access granted",1)
-					If _PathRequest() Then
-						_ConsoleWrite("Path request. Path OK.",1)
-						If _BatRequest() Then
-							_ConsoleWrite("Bat request. Bat OK.",1)
-							_RunBatFile()
-							ExitLoop
+	do
+		$ServiceIdleTimerInit=TimerInit()
+		While $ListenerActive
+			If _TCPacceptConnection() Then
+				If _Authentication() Then
+					_ConsoleWrite("Authentication request. Token OK, pass 1/2 access granted",1)
+					If _Authorization() Then
+						_ConsoleWrite("Authorization request. Token OK, pass 2/2 access granted",1)
+						If _PathRequest() Then
+							_ConsoleWrite("Path request. Path OK.",1)
+							If _BatRequest() Then
+								_ConsoleWrite("Bat request. Bat OK.",1)
+								_RunBatFile()
+								ExitLoop
+							Else
+								_ConsoleWrite("Authorization request task failed ",3)
+								ExitLoop
+							endif
 						Else
 							_ConsoleWrite("Authorization request task failed ",3)
 							ExitLoop
@@ -64,21 +69,19 @@ $UnitTest=1
 						ExitLoop
 					endif
 				Else
-					_ConsoleWrite("Authorization request task failed ",3)
+					_ConsoleWrite("Authentication request task failed ",3)
 					ExitLoop
 				endif
-			Else
-				_ConsoleWrite("Authentication request task failed ",3)
-				ExitLoop
 			endif
-		endif
-		If TimerDiff($ServiceIdleTimerInit)>$ServiceIdletimeout And $ConnectedSocket = -1 Then
-			_ConsoleWrite("Service Closing due timeout ("&$ServiceIdletimeout&")",1)
-			ExitLoop
-		EndIf
-;~ 	WaitResponse('START_UL','START_UL',50,60000)
-		Sleep(10)
-	WEnd
+			If TimerDiff($ServiceIdleTimerInit)>$ServiceIdletimeout And $ConnectedSocket = -1 Then
+				_ConsoleWrite("Service Closing due timeout ("&$ServiceIdletimeout&")",1)
+				ExitLoop
+			EndIf
+	;~ 	WaitResponse('START_UL','START_UL',50,60000)
+			Sleep(10)
+		WEnd
+	Until $UnitTest=0
+
 #endregion
 If @Compiled Then  _stopListener()
 _Exit()

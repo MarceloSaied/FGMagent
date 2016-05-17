@@ -1,5 +1,6 @@
 #REGION GENERAL
 ;~ 	Global $oMyError = ObjEvent("AutoIt.Error","MyErrFunc")
+	$debugflag=1  ; show console output
 	$version= FileGetVersion(@ScriptName)
 	$workDir="c:\temp"
 	$ProgramdataDir="c:\ProgramData"

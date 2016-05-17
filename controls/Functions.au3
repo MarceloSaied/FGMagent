@@ -3,14 +3,14 @@
 #endregion
 #region  ================================== Helpers ======================================
 	Func _getToken()
-;~ 		ConsoleWrite('++_getToken() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_getToken() = '& @crlf)
 		$StartTicks = _GetUnixTime()
 		$EndTicks = $StartTicks + 60
 		Local $var1=_Hashing($passcode&@SEC&$EndTicks,1)
 		Return $var1
 	EndFunc
 	Func _IsValidToken($token)
-;~ 		ConsoleWrite('++_IsValidToken() = '&$token& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_IsValidToken() = '&$token& @crlf)
 		Local $var1=_Hashing($token,0)
 		Local $tokenTicks=StringTrimLeft(StringReplace($var1,$passcode,""),2)
 		$NowTicks = _GetUnixTime()
@@ -21,11 +21,11 @@
 		endif
 	EndFunc
 	Func _ReverseDNS($IPAddress)
-;~ 		ConsoleWrite('++_ReverseDNS() = '& $IPAddress & @crlf)
+		if $debugflag=1 then ConsoleWrite('++_ReverseDNS() = '& $IPAddress & @crlf)
 		$IPAddress = StringStripWS($IPAddress,3)
 		$sCommand="nslookup "& $IPAddress
 		$ResponseText = _GetDOSOutput($sCommand)
-;~ 		ConsoleWrite('ResponseText = ' & $ResponseText & @crlf )
+		if $debugflag=1 then ConsoleWrite('ResponseText = ' & $ResponseText & @crlf )
 		If StringInStr($ResponseText,"*** UnKnown")>0 Then
 			Return "Unknown"
 		endif
@@ -39,7 +39,7 @@
 		Return "UnknownError"
 	EndFunc
 	Func _GetFQDN()
-;~ 		ConsoleWrite('++_GetFQDN() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_GetFQDN() = '& @crlf)
 		$objWMIService = ObjGet("winmgmts:{impersonationLevel = impersonate}!\\" & @ComputerName & "\root\cimv2")
 		If @error Then Return SetError(2, 0, "")
 		$colItems = $objWMIService.ExecQuery("SELECT Name,Domain FROM Win32_ComputerSystem ", "WQL", 0x30)
@@ -57,7 +57,7 @@
 		EndIf
 	EndFunc
 	Func _GetServerDNSip()
-;~ 		ConsoleWrite('++_GetServerDNSip() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_GetServerDNSip() = '& @crlf)
 		$fqdn=_GetFQDN()
 		_consolewrite("FQDN = "&$fqdn)
 		If @Compiled Then
@@ -71,7 +71,7 @@
 #endregion
 #region =================================== listener   ========================================
 	Func _startListener()
-;~ 		ConsoleWrite('++_startListener() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_startListener() = '& @crlf)
 		$listenerIP=_GetServerDNSip()
 		If _IsValidIP($listenerIP) Then
 			TCPStartup()
@@ -99,7 +99,7 @@
 		endif
 	EndFunc
 	Func _TCPacceptConnection()
-;~ 		ConsoleWrite('++_TCPacceptConnection() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_TCPacceptConnection() = '& @crlf)
 		;; Accept new incoming clients, and ask them to authorise.
 		$ConnectedSocket = TCPAccept($sMainSocket)
 		If $ConnectedSocket > -1 Then
@@ -116,7 +116,7 @@
 		EndIf
 	EndFunc
 	Func _Authentication()
-;~ 		ConsoleWrite('++_Authentication() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_Authentication() = '& @crlf)
 		$bitesSent=TCPSend($ConnectedSocket, "REQ_AUTH")
 		$err=@error
 		If $err Then
@@ -152,11 +152,11 @@
 		endif
 	EndFunc
 	Func _Authorization()
-;~ 		ConsoleWrite('++_Authorization() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_Authorization() = '& @crlf)
 		Return true
 	EndFunc
 	Func _PathRequest()
-;~ 		ConsoleWrite('++_PathRequest() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_PathRequest() = '& @crlf)
 		$bitesSent=TCPSend($ConnectedSocket, "REQ_PATH")
 		$err=@error
 		If $err Then
@@ -189,7 +189,7 @@
 		endif
 	EndFunc
 	Func _BatRequest()
-;~ 		ConsoleWrite('++_BatRequest() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_BatRequest() = '& @crlf)
 		$bitesSent=TCPSend($ConnectedSocket, "REQ_BAT")
 		$err=@error
 		If $err Then
@@ -224,12 +224,12 @@
 		endif
 	EndFunc
 	Func _RunBatFile()
-;~ 		ConsoleWrite('++_RunBatFile() = '&$PathFileBatCommand& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_RunBatFile() = '&$PathFileBatCommand& @crlf)
 		$msgresult=_GetDOSOutput($PathFileBatCommand,$pathFolderCommand)
 		_SendResults($msgresult)
 	EndFunc
 	Func _SendResults($msgresult)
-;~ 		ConsoleWrite('++_SendResults() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_SendResults() = '& @crlf)
 		$bitesSent=TCPSend($ConnectedSocket, $msgresult)
 		$err=@error
 		If $err Then

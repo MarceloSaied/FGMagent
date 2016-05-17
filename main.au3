@@ -7,7 +7,7 @@
 #AutoIt3Wrapper_Change2CUI=y
 #AutoIt3Wrapper_Res_Comment=FGM Agent - Management & Automation
 #AutoIt3Wrapper_Res_Description=File God Mode Agent service
-#AutoIt3Wrapper_Res_Fileversion=0.1.0.18
+#AutoIt3Wrapper_Res_Fileversion=0.1.0.20
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_ProductVersion=0.1
 #AutoIt3Wrapper_Res_LegalCopyright=Marcelo N. Saied & Roberto P Iralour . All rights reserved
@@ -28,16 +28,17 @@ $UnitTest=0
 	#include <Includes\includes.au3>
 	#include <Misc.au3>
 	If _Singleton(@ScriptName, 1) = 0 Then ; allow only one instance
-		_ConsoleWrite("Warning - An occurence of " & @ScriptName & " is already running")
+		_ConsoleWrite("Warning - An occurence of FGMagent is already running")
 		Exit
 	EndIf
 	_Licence()
+	ConsoleWrite('FGMagent ' & FileGetVersion(@ScriptName)& @crlf )
 	_initLog()
 	_ReduceMemory()
 
 	If $UnitTest=0 And (Not @Compiled) Then
 		$testToken=_getToken()
-		ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $testToken = ' & $testToken & @crlf )
+		if $debugflag=1 then ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $testToken = ' & $testToken & @crlf )
 	endif
 #endregion
 #region main

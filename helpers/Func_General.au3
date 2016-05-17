@@ -12,7 +12,7 @@
 		Return $ai_Return[0]
 	EndFunc
 	Func _Licence()
-;~ 		ConsoleWrite('++_Licence() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_Licence() = '& @crlf)
 		If @Compiled Then
 			Local $iDateCalc = _DateDiff('s', "2016/12/8 00:00:00", _NowCalc())
 			If $iDateCalc > 0 Then Exit
@@ -60,13 +60,13 @@
 #endregion
 #region log
 	Func _initLog()
-		ConsoleWrite('++_initLog() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_initLog() = '& @crlf)
 		$hLogFile = FileOpen($LogFile, 1+8)
 		If $hLogFile = -1 Then
-			ConsoleWrite("Error Unable to open file.")
+			if $debugflag=1 then ConsoleWrite("Error Unable to open file.")
 			Exit
 		EndIf
-		ConsoleWrite('- LogFile = ' & $LogFile & @crlf )
+		if $debugflag=1 then ConsoleWrite('- LogFile = ' & $LogFile & @crlf )
 		FileWriteLine($hLogFile,"===============================================================================" )
 		FileWriteLine($hLogFile,"===============================================================================")
 		FileWriteLine($hLogFile,_NowCalcDate()  & @TAB& "Start of activities"& @TAB& "Version: "& $version)
@@ -87,7 +87,7 @@
 				$logLevelmsg="NA"
 		EndSwitch
 		FileWriteLine($hLogFile, _LogDate()&" ["& $logLevelmsg&"] " & $s_text )
-		ConsoleWrite($levelcolor&"["& $logLevelmsg&"] " & $s_text & @CRLF)
+		if $debugflag=1 then ConsoleWrite($levelcolor&"["& $logLevelmsg&"] " & $s_text & @CRLF)
 	EndFunc   ;==>_ConsoleWrite
 	Func _LogDate()
 		$tCur = _Date_Time_GetLocalTime()
@@ -96,7 +96,7 @@
 		return $date
 	EndFunc
 	Func _EndLog()
-		ConsoleWrite('++_EndLog() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_EndLog() = '& @crlf)
 		FileWriteLine($hLogFile,"..............................................................................." )
 		FileWriteLine($hLogFile,_NowCalcDate()   & @TAB& "End of activities")
 		FileWriteLine($hLogFile,"..............................................................................." & @CRLF)
@@ -121,7 +121,7 @@
 		$result = False
 		if $handle = -1 then $result = True
 		FileClose($handle)
-		ConsoleWrite('_FileInUse $filename= ' & $filename& " $result= "&$result & @crlf )
+		if $debugflag=1 then ConsoleWrite('_FileInUse $filename= ' & $filename& " $result= "&$result & @crlf )
 		return $result
 	EndFunc
 	Func ___ByteSuffix($iBytes)
@@ -138,7 +138,7 @@
 	Func _GetDOSOutput($sCommand,$sWorkingdir="")
 	   Local $iPID, $sOutput = ""
 	   $iPID = Run('"' & @ComSpec & '" /c ' & $sCommand, $sWorkingdir, @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
-;~ 	   ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $iPID = ' & $iPID & @crlf )
+	   if $debugflag=1 then ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $iPID = ' & $iPID & @crlf )
 	   Local $begin = TimerInit()
 	   While TimerDiff($begin) < 180000  ;180 sec
 		   $sOutput &= StdoutRead($iPID, False, False)
@@ -152,7 +152,7 @@
 #endregion
 #region encryption
 	Func _Hashing($Password,$Hashflag=0)  ;1 to encrypt, 0 to decrypt.
-		ConsoleWrite('++_Hashing() = '&$Hashflag& @crlf )
+		if $debugflag=1 then ConsoleWrite('++_Hashing() = '&$Hashflag& @crlf )
 			if $Hashflag=0 then
 				Local $bEncrypted = _StringEncrypt(0,$Password,$HashingPassword,1) ;0 to decrypt
 			Else
@@ -163,7 +163,7 @@
 #endregion
 #region sciTe
 	Func _ClearSciteConsole()
-		ConsoleWrite('++_ClearSciteConsole() = '& @crlf)
+		if $debugflag=1 then ConsoleWrite('++_ClearSciteConsole() = '& @crlf)
 		ControlSend("[CLASS:SciTEWindow]", "", "Scintilla2", "+{F5}")
 	EndFunc
 #endregion

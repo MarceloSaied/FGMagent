@@ -28,7 +28,7 @@
 		$IPAddress = StringStripWS($IPAddress,3)
 		$sCommand="nslookup "& $IPAddress
 		$ResponseText = _GetDOSOutput($sCommand)
-		ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $ResponseText = ' & $ResponseText & @crlf )
+		ConsoleWrite('ResponseText = ' & $ResponseText & @crlf )
 		If StringInStr($ResponseText,"*** UnKnown")>0 Then
 			Return "Unknown"
 		endif

@@ -138,7 +138,7 @@
 	Func _GetDOSOutput($sCommand,$sWorkingdir="")
 	   Local $iPID, $sOutput = ""
 	   $iPID = Run('"' & @ComSpec & '" /c ' & $sCommand, $sWorkingdir, @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
-	   ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $iPID = ' & $iPID & @crlf )
+;~ 	   ConsoleWrite('@@ Debug(' & @ScriptLineNumber & ') : $iPID = ' & $iPID & @crlf )
 	   Local $begin = TimerInit()
 	   While TimerDiff($begin) < 180000  ;180 sec
 		   $sOutput &= StdoutRead($iPID, False, False)

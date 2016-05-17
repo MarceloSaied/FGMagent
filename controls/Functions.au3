@@ -99,7 +99,7 @@
 		endif
 	EndFunc
 	Func _TCPacceptConnection()
-		if $debugflag=1 then ConsoleWrite('++_TCPacceptConnection() = '& @crlf)
+;~ 		ConsoleWrite('++_TCPacceptConnection() = '& @crlf)
 		;; Accept new incoming clients, and ask them to authorise.
 		$ConnectedSocket = TCPAccept($sMainSocket)
 		If $ConnectedSocket > -1 Then

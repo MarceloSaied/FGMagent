@@ -281,11 +281,6 @@
 				_ConsoleWrite('Socket is not connected.request to send or receive data was disallowed because the socket is not connected.'&$err,3)
 			Case 10038
 				_ConsoleWrite('Socket operation on nonsocket. An operation was attempted on something that is not a socket.'&$err,3)
-
-
-
-
-
 			Case Else
 				Return false
 		EndSwitch
